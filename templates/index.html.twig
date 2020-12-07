@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+<style>
+
+</style>
+
+<h1>Liste des ressources</h1>
+<div class="ressource-list">
+
+{% for ressource in ressources %}
+    <div class="ressource">
+        <h2>{{ ressource.titre }}</h2>
+        <p>{{ ressource.contenu }}</p>
+        <img src="{{ asset('uploads/medias/' ~ ressource.media) }}" alt="post media" height="200" width="300">
+        <a href="{{ path('editRessource', {'id':ressource.id}) }}"><i class="far fa-edit"></i></a>
+    </div>
+    <br><br>
+{% endfor %}
+</div>
+
+{% endblock %}
