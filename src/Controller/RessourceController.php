@@ -39,8 +39,8 @@ class RessourceController extends AbstractController
             if ($ressourceFile) {
                 $originalFilename = pathinfo($ressourceFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
-                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$ressourceFile->guessExtension();
+                //$safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$ressourceFile->guessExtension();
 
                 // Move the file to the directory where medias are stored
                 try {

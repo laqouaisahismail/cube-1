@@ -42,6 +42,16 @@ class Ressource
      */
     private $iduser;
 
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $categorie;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $statut;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +113,30 @@ class Ressource
     public function setIduser(?int $iduser): self
     {
         $this->iduser = $iduser;
+
+        return $this;
+    }
+
+    public function getCategorie(): ?string
+    {
+        return $this->categorie;
+    }
+
+    public function setCategorie(?string $categorie): self
+    {
+        $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }
