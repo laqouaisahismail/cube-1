@@ -19,22 +19,49 @@ class RessourceRepository extends ServiceEntityRepository
         parent::__construct($registry, Ressource::class);
     }
 
-    // /**
-    //  * @return Ressource[] Returns an array of Ressource objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Ressource[] Returns an array of Ressource objects
+    */
+    
+    public function searchRessourceRep($criteria)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
+        //dd($criteria);
+        //dd($criteria['categorie']);
+
+        if ($criteria['categorie'] == null && isset($criteria['titre']) ){
+            return $this->createQueryBuilder('r')
+            ->andWhere('r.titre = :titre')
+            ->setParameter('titre', $criteria['titre'])
             ->orderBy('r.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
+        }elseif($criteria['titre'] == null && isset($criteria['categorie'])){
+            return $this->createQueryBuilder('r')
+            ->andWhere('r.categorie = :categorie')
+            ->setParameter('categorie', $criteria['categorie'])
+            ->orderBy('r.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        }else{
+            return $this->createQueryBuilder('r')
+            ->andWhere('r.titre = :titre')
+            ->setParameter('titre', $criteria['titre'])
+            ->andWhere('r.categorie = :categorie')
+            ->setParameter('categorie', $criteria['categorie'])
+            ->orderBy('r.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        }
+
+        
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Ressource
