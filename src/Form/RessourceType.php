@@ -34,14 +34,15 @@ class RessourceType extends AbstractType
                 // in the associated entity, so you can use the PHP constraint classes
                 'constraints' => [
                     new File([
-                        'maxSize' => '50000k',
+                        'maxSize' => '100m',
                         'mimeTypes' => [
                             'application/pdf',
                             'application/x-pdf',
                             'image/jpeg',
+                            'image/jpg',
                             'image/png',
                             'image/gif',
-                            'application/mp4',
+                            'video/mp4',
                         ],
                         'mimeTypesMessage' => 'Please upload a valid pdf, jpeg, png, gif or mp4 file',
                     ])

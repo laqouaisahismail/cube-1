@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class RessourceController extends AbstractController
 {
     /**
-     * @Route("/ajout-ressource", name="addRessource")
+     * @Route("/ressource/ajout", name="addRessource")
      */
     public function AddRessource(Request $request, EntityManagerInterface $manager): Response
     {
@@ -89,15 +89,22 @@ class RessourceController extends AbstractController
             $repository = $this->getDoctrine()->getRepository(Ressource::class);
             $ressources = $repository->findAll();
 
+            foreach ($ressources as $key => $ressource){
+
+                $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+
+            }
+
 
             return $this->render('index.html.twig', [
                 'ressources' => $ressources,
-                
+                'extension' => $ext,
+
             ]);
             }
 
         /**
-         * @Route("/editer-ressource/{id}", name="editRessource")
+         * @Route("/ressource/edit/{id}", name="editRessource")
         */
         public function editRessources(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
         {
