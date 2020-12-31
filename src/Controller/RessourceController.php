@@ -82,26 +82,46 @@ class RessourceController extends AbstractController
     }
 
         /**
-         * @Route("/", name="home")
+         * @Route("/ressources", name="ressources")
         */
         public function listRessources() : Response
         {
             $repository = $this->getDoctrine()->getRepository(Ressource::class);
-            $ressources = $repository->findAll();
+            //$ressources = $repository->findAll();
+            $ressources = $repository->findBy(
+                ['statut' => 'publie'],
+                ['id' => 'DESC']
+            );
 
             foreach ($ressources as $key => $ressource){
-
                 $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-
             }
 
 
-            return $this->render('index.html.twig', [
+            return $this->render('ressource/ressources.html.twig', [
                 'ressources' => $ressources,
                 'extension' => $ext,
 
             ]);
             }
+
+        /**
+         * @Route("/ressource/delete/{id}", name="deleteRessource")
+        */
+        public function deleteRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource)
+        {
+            $manager->remove($ressource);
+            if ( $manager->flush()) {
+                $this->addFlash(
+                    'notice',
+                    'Le post a eté bien supprimé !'
+                );
+                };
+
+            return $this->redirectToRoute("ressources");
+
+
+        }
 
         /**
          * @Route("/ressource/edit/{id}", name="editRessource")
@@ -121,7 +141,11 @@ class RessourceController extends AbstractController
                 // this condition is needed because the 'media' field is not required
                 // so the file must be processed only when a file is uploaded
                 if ($ressourceFile) {
-                    unlink($this->getParameter('medias_directory').'/'. $ressource->getMedia()); //ici je supprime le fichier
+                    $oldfile = $this->getParameter('medias_directory').'/'. $ressource->getMedia();
+                    //dd($oldfile);
+                    if (file_exists($oldfile)) {
+                        unlink($oldfile); //ici je supprime le fichier
+                    }
 
                     $originalFilename = pathinfo($ressourceFile->getClientOriginalName(), PATHINFO_FILENAME);
                     // this is needed to safely include the file name as part of the URL
@@ -154,7 +178,7 @@ class RessourceController extends AbstractController
                     'Le post a eté bien modifié !'
                 );
                 
-                return $this->redirectToRoute("home");
+                return $this->redirectToRoute("ressources");
     
     
             }
