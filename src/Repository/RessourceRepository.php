@@ -25,8 +25,6 @@ class RessourceRepository extends ServiceEntityRepository
     
     public function searchRessourceRep($criteria)
     {
-        //dd($criteria);
-        //dd($criteria['categorie']);
 
         if ($criteria['categorie'] == null && isset($criteria['titre']) ){
             return $this->createQueryBuilder('r')
@@ -58,6 +56,26 @@ class RessourceRepository extends ServiceEntityRepository
             ->getResult();
 
         }
+
+        
+    }
+    /**
+     * @return Ressource[] Returns an array of Ressource objects
+    */
+    
+    public function navSearchRessourceRep($keyword)
+    {
+            //dd($keyword);
+            return $this->createQueryBuilder('r')
+            ->andWhere('r.titre = :titre')
+            ->setParameter('titre', $keyword)
+            ->orderBy('r.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        
 
         
     }
