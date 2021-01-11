@@ -21,7 +21,7 @@
     {% set ext =  extension[ressourceId] %}
     <hr>
         <div class="ressource">
-            <h2><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
+            <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
             <p>{{ ressource.contenu }}</p>
             {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
                 <img src="{{ media }}" alt="post media" height="auto" width="500">

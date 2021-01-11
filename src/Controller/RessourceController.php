@@ -195,9 +195,12 @@ class RessourceController extends AbstractController
         public function viewRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
         {
 
+                $ext = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
 
             return $this->render('ressource/viewRessource.html.twig', [
                 'ressource' => $ressource,
+                'ext' => $ext,
+
             ]);
 
 
