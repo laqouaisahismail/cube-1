@@ -4,5 +4,17 @@
 <h1> Inscription   </h1>
 {{ form_start(form) }}
 {{ form_widget(form) }}
-<button type "submit" class "btn btn-succes">Inscription ! </button>
+
+{{ form_widget(form) }}
+
+{{ form_row(form.username, {'label' : 'Nom d\'utilisateur','attr': {'placeholder' : 'Username...'}}) }}
+
+{{ form_row(form.email, {'label' : 'Adresse Email','attr': {'placeholder' : 'Adresse mail...'}}) }}
+
+{{ form_row(form.password, {'label' : 'Mot de passe','attr': {'placeholder' : 'Mot de Passe...'}}) }}
+
+{{ form_row(form.confirm_password, {'label' : 'Confirmation du mot de passe','attr': {'placeholder' : 'Confirmation du mot de passe...'}}) }} 
+
+
+<button type "submit" class "btn btn-succes">Inscription  </button>
 {%  endblock   %}
