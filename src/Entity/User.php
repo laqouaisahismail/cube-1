@@ -20,17 +20,20 @@ class User
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $nom;
+
+    private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $mdp;
+    private $username;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private $role;
+    private $password;
+
+    public $confirm_password;
 
     public function getId(): ?int
     {
@@ -69,6 +72,42 @@ class User
     public function setRole(?string $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
 
         return $this;
     }
