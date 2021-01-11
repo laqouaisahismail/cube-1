@@ -31,7 +31,12 @@ class User
     /**
      * @ORM\Column(type="string", length=255)
      */
+    
     private $password;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $role;
 
     public $confirm_password;
 
