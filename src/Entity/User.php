@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -108,4 +109,13 @@ class User
 
         return $this;
     }
+
+    public function eraseCredentials() {}
+    public function getSalt() {}
+    
+    public function getRoles() {
+        return ['ROLE_USER'];
+
+    }
+
 }
