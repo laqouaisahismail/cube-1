@@ -44,5 +44,15 @@
         <br><br>
 {% endfor %}
 </div>
+<center> 
+<h2>Commentaires</h2>
+    {% for comment in ressources %}
+        <p>Commentaire écrit par {{ "JérémyTest" }} </p>
+        <p>{{ "Caesarem scriptis destitutus clandestinis obstaculo et simulationem tractatus incumberet conloquiis scriptis cum nimis id curarum." }}</p>
+    {% else %}
+        <p>Il n'y a pas encore de commentaire, publiez le premier !</p>
+    {% endfor %}
+    
+</center>
 
 {% endblock %}

@@ -1,19 +1,25 @@
 <?php
 
 namespace App\Controller;
-
+use App\Entity\User;
+use App\Entity\Comment;
 use App\Entity\Ressource;
 use App\Form\RessourceType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class RessourceController extends AbstractController
 {
+
+    
+
+
+
     /**
      * @Route("/ressource/ajout", name="addRessource")
      */
@@ -186,8 +192,16 @@ class RessourceController extends AbstractController
             return $this->render('ressource/addRessource.html.twig', [
                 'form' => $form->createView(),
             ]);
-                    
+            $comment = new Comment();  
+            $form = $this->createForm(CommentType::class, $comment); 
 
             }
 
+            
+            
+
+           
+
+
 }
+

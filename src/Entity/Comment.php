@@ -36,7 +36,7 @@ class Comment
      * @ORM\ManyToOne(targetEntity=Ressource::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $ressource;
+    private $idRessource;
 
     public function getId(): ?int
     {
@@ -79,14 +79,14 @@ class Comment
         return $this;
     }
 
-    public function getRessource(): ?Ressource
+    public function getIdRessource(): ?Ressource
     {
-        return $this->ressource;
+        return $this->idRessource;
     }
 
-    public function setRessource(?Ressource $ressource): self
+    public function setIdRessource(?Ressource $idRessource): self
     {
-        $this->ressource = $ressource;
+        $this->idRessource = $idRessource;
 
         return $this;
     }
