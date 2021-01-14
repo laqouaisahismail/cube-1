@@ -24,7 +24,7 @@ security:
 
             logout:
                 path: securtity_logout
-                target: securtity_login
+                #target: securtity_logout
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
