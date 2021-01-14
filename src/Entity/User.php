@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +31,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min="10", minMessage="Votre mot de passe doit faire minimum 10 caracteres !")
      */
     private $password;
 
@@ -43,6 +44,10 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=100)
      */
     private $nom;
+
+     /**
+     * @Assert\EqualTo(propertyPath="password", message="Les mots de passe ne correspondent pas !")
+     */
 
     public $confirm_password;
 
