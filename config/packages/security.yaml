@@ -23,7 +23,7 @@ security:
                 check_path: security_login
 
             logout:
-                path: securtity_logout
+                path: /logout
                 #target: securtity_logout
 
             # activate different ways to authenticate
