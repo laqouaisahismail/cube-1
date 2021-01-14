@@ -20,73 +20,72 @@ class Comment
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $author;
+    private $Content;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="integer")
      */
-    private $content;
+    private $idUser;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $idRessource;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Ressource::class, inversedBy="comments")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $ressource;
+    private $Date;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
     public function getContent(): ?string
     {
-        return $this->content;
+        return $this->Content;
     }
 
-    public function setContent(string $content): self
+    public function setContent(string $Content): self
     {
-        $this->content = $content;
+        $this->Content = $Content;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getIdUser(): ?int
     {
-        return $this->createdAt;
+        return $this->idUser;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setIdUser(int $idUser): self
     {
-        $this->createdAt = $createdAt;
+        $this->idUser = $idUser;
 
         return $this;
     }
 
-    public function getRessource(): ?Ressource
+    public function getIdRessource(): ?int
     {
-        return $this->ressource;
+        return $this->idRessource;
     }
 
-    public function setRessource(?Ressource $ressource): self
+    public function setIdRessource(int $idRessource): self
     {
-        $this->ressource = $ressource;
+        $this->idRessource = $idRessource;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->Date;
+    }
+
+    public function setDate(\DateTimeInterface $Date): self
+    {
+        $this->Date = $Date;
 
         return $this;
     }
