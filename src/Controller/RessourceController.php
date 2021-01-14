@@ -93,8 +93,13 @@ class RessourceController extends AbstractController
                 ['id' => 'DESC']
             );
 
-            foreach ($ressources as $key => $ressource){
-                $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+            if(!empty($ressources)){
+                foreach ($ressources as $key => $ressource){
+                    $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+                }
+    
+            }else{
+                $ext= "Pas de ressource";
             }
 
 
