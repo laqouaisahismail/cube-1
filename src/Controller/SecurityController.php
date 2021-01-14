@@ -36,7 +36,7 @@ class SecurityController extends AbstractController
 
         $manager = $this->getDoctrine()->getManager();
 
-        $user = $user->setNom("defaut");
+        
         $user = $user->setRole("user");
 
 
