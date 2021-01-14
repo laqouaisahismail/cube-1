@@ -3,10 +3,7 @@
 {% block body %}
 <h1> Inscription   </h1>
 {{ form_start(form) }}
-{{ form_widget(form) }}
-
-{{ form_widget(form) }}
-
+{{ form_row(form._token) }}
 {{ form_row(form.username, {'label' : 'Nom d\'utilisateur','attr': {'placeholder' : 'Username...'}}) }}
 
 {{ form_row(form.email, {'label' : 'Adresse Email','attr': {'placeholder' : 'Adresse mail...'}}) }}
@@ -16,5 +13,5 @@
 {{ form_row(form.confirm_password, {'label' : 'Confirmation du mot de passe','attr': {'placeholder' : 'Confirmation du mot de passe...'}}) }} 
 
 
-<button type "submit" class "btn btn-succes">Inscription  </button>
+<button type "submit" class "btn btn-success">Inscription  </button>
 {%  endblock   %}
