@@ -33,11 +33,28 @@
                         <li class="nav-item">
                         <a class="nav-link" href="{{  path('addRessource') }}">Publier une ressource</a>
                         </li>
+                        {% if not app.user %}
+                        <li class="nav-item">
+                        <a href="{{ path ('security_login')}}" class="nav-link">
+                        Connexion</a>
+                         </li>
+                         {% else %}
+                         <li class="nav-item">
+                        <a href="{{ path ('security_logout')}}" class="nav-link">
+                        Deconnexion</a>
+                         </li>
+                         {% endif %}
+
                         
+
+                       
+
+
+
                     </ul>
                     <form class="d-flex"  action="{{  path('navSearch') }}">
                         <input id="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
-                        <button class="btn btn-light mx-3" type="submit">Recherchez</button>
+                        <button class="btn btn-outline-success mx-3" type="submit">Rechercher</button>
                     </form>
                     <a class="btn btn-light" href="{{  path('search') }}">Outil de recherche</a>
 
