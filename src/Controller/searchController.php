@@ -64,6 +64,7 @@ class searchController extends AbstractController
 		if (isset($keyword) && !empty($keyword)) {
 
             $ressources = $ressourceRepository->navSearchRessourceRep($keyword);
+
             if (!empty($ressources)){
 
                 foreach ($ressources as $key => $ressource){
@@ -73,8 +74,6 @@ class searchController extends AbstractController
             }else{
                 $ext='';
             }
-    
-        
 
         return $this->render('search/NavSearchRessource.html.twig', [
             'ressources' => $ressources,

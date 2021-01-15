@@ -65,7 +65,6 @@ class RessourceRepository extends ServiceEntityRepository
     
     public function navSearchRessourceRep($keyword)
     {
-            //dd($keyword);
             return $this->createQueryBuilder('r')
             ->andWhere('r.titre = :titre')
             ->setParameter('titre', $keyword)
@@ -75,9 +74,6 @@ class RessourceRepository extends ServiceEntityRepository
             ->getResult()
         ;
 
-        
-
-        
     }
     
 

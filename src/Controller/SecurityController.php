@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-
-
+use App\Entity\Admin;
 use App\Entity\User;
+use App\Form\AddAdminType;
 use App\Form\RegistrationType;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +25,6 @@ class SecurityController extends AbstractController
     {
 
     $user = new User();
-        //($user);
     $form = $this->createForm(RegistrationType::class, $user);
 
     $form->handleRequest($request);
@@ -37,9 +36,6 @@ class SecurityController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
 
         
-        $user = $user->setRole("user");
-
-
         $manager->persist($user);
         $manager->flush();
 
@@ -49,14 +45,57 @@ class SecurityController extends AbstractController
     return $this->render('security/registration.html.twig' , [
     'form' => $form->createView()
     ]);
+    } 
+    
+    /**
+    * @Route("/admin/inscription", name="security_add_admin")
+    */
+    public function adminRegistration(Request $request, EntityManagerInterface $manager, 
+        UserPasswordEncoderInterface $encoder) 
+    {
+
+
+    $admin = new Admin();
+
+    $form = $this->createForm(AddAdminType::class, $admin);
+    $form->handleRequest($request);
+
+    if($form->isSubmitted() && $form->isValid()) {
+
+        $admin = new Admin();
+
+        $hash = $encoder->encodePassword($admin, $admin->getPassword());
+
+        $admin->setPassword($hash);
+
+        $manager = $this->getDoctrine()->getManager();
+
+        $admin->setUsername($form->get('username')->getData());
+
+        $manager->persist($admin);
+        $manager->flush();
+
+        return $this->redirectToRoute('security_admin_login');
     }
+
+    return $this->render('security/addAdmin.html.twig' , [
+    'form' => $form->createView()
+    ]);
+    }
+
     /**
      * @Route("/connexion",name="security_login")
      */
     public function login() {
         return $this->render('security/login.html.twig');    }
-      
-     
+
+    /**
+     * @Route("/admin/connexion",name="security_admin_login")
+     */
+    public function adminLogin() {
+        return $this->render('security/adminLogin.html.twig');    }
+
+
     /**
      * @Route("/logout",name="security_logout")
      */

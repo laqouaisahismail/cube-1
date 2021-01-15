@@ -2,24 +2,19 @@
 
 namespace App\Form;
 
-use App\Entity\User;
+use App\Entity\Admin;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class RegistrationType extends AbstractType
+class AddAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
-            ->add('nom')
             ->add('username')
-            ->add('role')
-            ->add('password', PasswordType::class)
-            ->add('confirm_password',PasswordType::class)
+            ->add('password')
             ->add('submit', SubmitType::class);
 
         ;
@@ -28,7 +23,7 @@ class RegistrationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class' => Admin::class,
         ]);
     }
 }

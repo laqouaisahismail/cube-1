@@ -5,15 +5,6 @@
 {{ form_start(form) }}
 {{ form_row(form._token) }}
 {{ form_row(form.username, {'label' : 'Nom d\'utilisateur','attr': {'placeholder' : 'Nom d\'utilisateur..'}}) }}
-
-{{ form_row(form.nom, {'label' : 'Nom','attr': {'placeholder' : 'Nom...'}}) }}
-
-{{ form_row(form.email, {'label' : 'Adresse Email','attr': {'placeholder' : 'Adresse mail...'}}) }}
-
 {{ form_row(form.password, {'label' : 'Mot de passe','attr': {'placeholder' : 'Mot de Passe...'}}) }}
-
-{{ form_row(form.confirm_password, {'label' : 'Confirmation du mot de passe','attr': {'placeholder' : 'Confirmation du mot de passe...'}}) }} 
-
 {{ form_row(form.submit, {'attr': {'class' : 'btn btn-success'}}) }}
-
 {%  endblock   %}
