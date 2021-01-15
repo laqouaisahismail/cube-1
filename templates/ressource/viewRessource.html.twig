@@ -1,27 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Search{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
 <style>
 
 </style>
-
-
-
 <div class="ressource-list text-center">
-<h1>Outil de recherche</h1>
-{{ form(form) }}
 
-{% if ressources|length > 0 %}
 
-{% for ressource in ressources %}
+
     {% set media =  asset('uploads/medias/' ~ ressource.media) %}
     {% set ressourceId =  ressource.id %}
-    {% set ext =  extension[ressourceId] %}
-    <hr>
+
+ 
+ <hr>
         <div class="ressource">
-            <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
+            <h2 class="res-title">{{ ressource.titre }}</h2>
             <p>{{ ressource.contenu }}</p>
             {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
                 <img src="{{ media }}" alt="post media" height="auto" width="500">
@@ -41,14 +36,10 @@
             {% endif %}
 
 
+            <a href="{{  path('editRessource', {'id':ressource.id}) }}"><i class="far fa-edit"></i></a>
+            <a href="{{  path('deleteRessource', {'id':ressource.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement cet ressource ?');"><i class="far fa-trash-alt"></i></a>
         </div>
         <br><br>
-{% endfor %}
-
-{% else %}
-
-    <h2>Aucune ressource trouvée !</h2>
-{% endif %}
 </div>
 
 {% endblock %}

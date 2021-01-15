@@ -93,8 +93,13 @@ class RessourceController extends AbstractController
                 ['id' => 'DESC']
             );
 
-            foreach ($ressources as $key => $ressource){
-                $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+            if(!empty($ressources)){
+                foreach ($ressources as $key => $ressource){
+                    $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+                }
+    
+            }else{
+                $ext= "Pas de ressource";
             }
 
 
@@ -119,7 +124,6 @@ class RessourceController extends AbstractController
                 };
 
             return $this->redirectToRoute("ressources");
-
 
         }
 
@@ -186,7 +190,24 @@ class RessourceController extends AbstractController
             return $this->render('ressource/addRessource.html.twig', [
                 'form' => $form->createView(),
             ]);
-                    
+
+
+            }
+
+        /**
+         * @Route("/ressource/view/{id}", name="viewRessource")
+        */
+        public function viewRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
+        {
+
+                $ext = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+
+            return $this->render('ressource/viewRessource.html.twig', [
+                'ressource' => $ressource,
+                'ext' => $ext,
+
+            ]);
+
 
             }
 
