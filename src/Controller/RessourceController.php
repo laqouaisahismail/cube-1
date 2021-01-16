@@ -20,9 +20,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RessourceController extends AbstractController
 {
     /**
-     * @Route("/resources/{titre}")
+     * @Route("/resources/{id}")
      */
-    public function ApisearchByTitle(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
+    public function ApiSearchById(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
     {
         $response = new Response();
         $ressource2 = $ressource->jsonSerialize();
