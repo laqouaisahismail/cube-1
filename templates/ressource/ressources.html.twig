@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('addRessource') }}">
+                        <span data-feather="home"></span>
+                            S'exprimer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                        <span data-feather="file"></span>
+                            Profil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('search') }}">
+                        <span data-feather="shopping-cart"></span>
+                            Recherche
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+        <div class="ressource-list text-center col-md-9 col-lg-10">
+
+            {# <h1 class="text-center">Liste des ressources</h1> #}
+
+
+            {% for ressource in ressources %}
+                {% set media =  asset('uploads/medias/' ~ ressource.media) %}
+                {% set ressourceId =  ressource.id %}
+                {% set ext =  extension[ressourceId] %}
+                <hr>
+                    <div class="ressource">
+                        <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
+                        <p>{{ ressource.contenu }}</p>
+                        {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
+                            <img src="{{ media }}" alt="post media" height="auto" width="500">
+
+                        {% elseif ext == "mp4" %}
+                            <video controls width="500" height="auto">
+
+                                <source src="{{ media }}" type="video/mp4">
+
+                                Désolé, votre navigateur ne prend pas en charge les vidéos intégrées.
+                            </video>
+                        
+                        {% else %}
+
+                            <a href="{{ media }}" target="_blank">Voir le fichier</a>
+
+                        {% endif %}
+
+
+                        <a href="{{  path('editRessource', {'id':ressource.id}) }}"><i class="far fa-edit"></i></a>
+                        <a href="{{  path('deleteRessource', {'id':ressource.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement cet ressource ?');"><i class="far fa-trash-alt"></i></a>
+                    </div>
+                    <br><br>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
