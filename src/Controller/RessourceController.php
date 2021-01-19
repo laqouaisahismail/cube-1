@@ -11,16 +11,17 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class RessourceController extends AbstractController
 {
     /**
-     * @Route("/ressource/ajout", name="addRessource")
+     * @Route("profile/ressource/ajout", name="addRessource")
      */
-    public function AddRessource(Request $request, EntityManagerInterface $manager): Response
+    public function AddRessource(Request $request, EntityManagerInterface $manager, UserInterface $user): Response
     {
 
-
+        $userId = $user->getId();
         $ressource = new Ressource();
         $form = $this->createForm(RessourceType::class, $ressource);
         $form->handleRequest($request);
@@ -59,10 +60,9 @@ class RessourceController extends AbstractController
 
             // ... persist the $ressource variable or any other work
 
-
-
-
             $ressource->setDate(new \DateTime());
+            $ressource->setIduser($userId);
+            
 			$manager->persist($ressource);
             $manager->flush();
 
@@ -71,7 +71,7 @@ class RessourceController extends AbstractController
                 'Le post a eté bien publié !'
             );
             
-            return $this->redirectToRoute("addRessource");
+            return $this->redirectToRoute("myResources");
 
 
         }
@@ -80,6 +80,7 @@ class RessourceController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
 
         /**
          * @Route("/ressources", name="ressources")
@@ -99,6 +100,38 @@ class RessourceController extends AbstractController
                 }
     
             }else{
+                $ext = "Pas de ressource";
+            }
+
+
+            return $this->render('ressource/ressources.html.twig', [
+                'ressources' => $ressources,
+                'extension' => $ext,
+                'crud' => false,
+
+
+            ]);
+            }
+
+        /**
+         * @Route("/profile/ressources", name="myResources")
+        */
+        public function listMyRessources(UserInterface $user) : Response
+        {
+            $repository = $this->getDoctrine()->getRepository(Ressource::class);
+            //$ressources = $repository->findAll();
+
+            $ressources = $repository->findBy(
+                ['iduser' => $user->getId()],
+                ['id' => 'DESC']
+            );
+
+            if(!empty($ressources)){
+                foreach ($ressources as $key => $ressource){
+                    $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+                }
+    
+            }else{
                 $ext= "Pas de ressource";
             }
 
@@ -106,87 +139,106 @@ class RessourceController extends AbstractController
             return $this->render('ressource/ressources.html.twig', [
                 'ressources' => $ressources,
                 'extension' => $ext,
+                'crud' => true,
 
             ]);
             }
 
         /**
-         * @Route("/ressource/delete/{id}", name="deleteRessource")
+         * @Route("profile/ressource/delete/{id}", name="deleteRessource")
         */
-        public function deleteRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource)
+        public function deleteRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource, UserInterface $user)
         {
-            $manager->remove($ressource);
-            if ( $manager->flush()) {
-                $this->addFlash(
-                    'notice',
-                    'Le post a eté bien supprimé !'
-                );
-                };
+            if ($user->getId() == $ressource->getIduser()){
+                $manager->remove($ressource);
 
-            return $this->redirectToRoute("ressources");
+                if ( $manager->flush()) {
+
+                    $this->addFlash('notice', 'La ressource a eté bien supprimé !');
+
+                    };
+    
+
+            }else{
+                if ( $manager->flush()) {
+                    $this->addFlash('notice','Vous ne pouvez supprimer que vos ressources !');
+                    };
+
+            }
+            return $this->redirectToRoute("myResources");
 
         }
 
         /**
-         * @Route("/ressource/edit/{id}", name="editRessource")
+         * @Route("profile/ressource/edit/{id}", name="editRessource")
         */
-        public function editRessources(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
+        public function editRessources(Request $request, EntityManagerInterface $manager, Ressource $ressource, UserInterface $user): Response
         {
 
             $form = $this->createForm(RessourceType::class, $ressource);
             $form->handleRequest($request);
     
-    
-            if ($form->isSubmitted() && $form->isValid()) {    
+            if ($user->getId() == $ressource->getIduser()){
+                if ($form->isSubmitted() && $form->isValid()) {    
         
-                /** @var UploadedFile $ressourceFile */
-                $ressourceFile = $form->get('media')->getData();
-
-                // this condition is needed because the 'media' field is not required
-                // so the file must be processed only when a file is uploaded
-                if ($ressourceFile) {
-                    $oldfile = $this->getParameter('medias_directory').'/'. $ressource->getMedia();
-                    //dd($oldfile);
-                    if (file_exists($oldfile)) {
-                        unlink($oldfile); //ici je supprime le fichier
+                    /** @var UploadedFile $ressourceFile */
+                    $ressourceFile = $form->get('media')->getData();
+    
+                    // this condition is needed because the 'media' field is not required
+                    // so the file must be processed only when a file is uploaded
+                    if ($ressourceFile) {
+                        $oldfile = $this->getParameter('medias_directory').'/'. $ressource->getMedia();
+                        //dd($oldfile);
+                        if (file_exists($oldfile)) {
+                            unlink($oldfile); //ici je supprime le fichier
+                        }
+    
+                        $originalFilename = pathinfo($ressourceFile->getClientOriginalName(), PATHINFO_FILENAME);
+                        // this is needed to safely include the file name as part of the URL
+                        $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                        $newFilename = $safeFilename.'-'.uniqid().'.'.$ressourceFile->guessExtension();
+    
+                        // Move the file to the directory where medias are stored
+                        try {
+                            $ressourceFile->move(
+                                $this->getParameter('medias_directory'),
+                                $newFilename
+                            );
+                        } catch (FileException $e) {
+                            $this->addFlash(
+                                'notice',
+                                'Le media est pas telechargé !'
+                            );
+                                }
+    
+                        // updates the 'ressourceFilename' property to store the file name
+                        // instead of its contents
+                        $ressource->setMedia($newFilename);
                     }
+    
+    
+                    $manager->flush();
+        
+                    $this->addFlash(
+                        'notice',
+                        'Le post a eté bien modifié !'
+                    );
+                    
+                    return $this->redirectToRoute("myResources");
 
-                    $originalFilename = pathinfo($ressourceFile->getClientOriginalName(), PATHINFO_FILENAME);
-                    // this is needed to safely include the file name as part of the URL
-                    $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-                    $newFilename = $safeFilename.'-'.uniqid().'.'.$ressourceFile->guessExtension();
-
-                    // Move the file to the directory where medias are stored
-                    try {
-                        $ressourceFile->move(
-                            $this->getParameter('medias_directory'),
-                            $newFilename
-                        );
-                    } catch (FileException $e) {
-                        $this->addFlash(
-                            'notice',
-                            'Le media est pas telechargé !'
-                        );
-                            }
-
-                    // updates the 'ressourceFilename' property to store the file name
-                    // instead of its contents
-                    $ressource->setMedia($newFilename);
+        
                 }
 
-
-                $manager->flush();
-    
+            }else{
                 $this->addFlash(
                     'notice',
-                    'Le post a eté bien modifié !'
+                    'Vous ne pouvez modifier que vos ressources !'
                 );
-                
-                return $this->redirectToRoute("ressources");
-    
+                return $this->redirectToRoute("myResources");
     
             }
-    
+
+
             return $this->render('ressource/addRessource.html.twig', [
                 'form' => $form->createView(),
             ]);
@@ -205,6 +257,20 @@ class RessourceController extends AbstractController
             return $this->render('ressource/viewRessource.html.twig', [
                 'ressource' => $ressource,
                 'ext' => $ext,
+
+            ]);
+
+
+            }
+
+        /**
+         * @Route("/profile", name="profile")
+        */
+        public function Profile(UserInterface $user): Response
+        {
+
+            return $this->render('profile.html.twig', [
+                'user' => $user,
 
             ]);
 

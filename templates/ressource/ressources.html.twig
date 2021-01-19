@@ -6,7 +6,7 @@
 
     <div class="row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-sticky pt-3">
+            <div class="position-fixed pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="{{  path('addRessource') }}">
@@ -15,7 +15,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{  path('profile') }}">
                         <span data-feather="file"></span>
                             Profil
                         </a>
@@ -44,6 +44,11 @@
                 <hr>
                     <div class="ressource">
                         <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
+
+                        {% if ressource.statut == 'brouillon' %}
+                            <div class="draft"><i class="far fa-clipboard mx-2"></i><span>brouillon</span></div>
+                        {% endif %}
+
                         <p>{{ ressource.contenu }}</p>
                         {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
                             <img src="{{ media }}" alt="post media" height="auto" width="500">
@@ -62,9 +67,12 @@
 
                         {% endif %}
 
-
-                        <a href="{{  path('editRessource', {'id':ressource.id}) }}"><i class="far fa-edit"></i></a>
-                        <a href="{{  path('deleteRessource', {'id':ressource.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement cet ressource ?');"><i class="far fa-trash-alt"></i></a>
+                        {% if crud %}
+                            <div class="crud">
+                                <a href="{{  path('editRessource', {'id':ressource.id}) }}"><i class="far fa-edit mx-2"></i></a>
+                                <a href="{{  path('deleteRessource', {'id':ressource.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement cet ressource ?');"><i class="far fa-trash-alt mx-2"></i></a>
+                            </div>
+                        {% endif %}
                     </div>
                     <br><br>
             {% endfor %}

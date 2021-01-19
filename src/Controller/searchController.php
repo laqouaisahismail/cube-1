@@ -49,6 +49,8 @@ class searchController extends AbstractController
             'form' => $form->createView(),
             'ressources' => $ressources,
             'extension' => $ext,
+            'crud' => false,
+
         ]);
 
     }
@@ -79,6 +81,8 @@ class searchController extends AbstractController
         return $this->render('search/NavSearchRessource.html.twig', [
             'ressources' => $ressources,
             'extension' => $ext,
+            'crud' => false,
+
 
         ]);
         }else{

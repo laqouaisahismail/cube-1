@@ -53,7 +53,7 @@ class RessourceType extends AbstractType
             ->add('statut', ChoiceType::class, [
                 'choices'  => [
                     'Public' => 'publie',
-                    'Brouillon' => 'bruillon',
+                    'Brouillon' => 'brouillon',
                 ],
             ])
             ->add('submit', SubmitType::class);
