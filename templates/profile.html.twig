@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-fixed pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('addRessource') }}">
+                        <span data-feather="home"></span>
+                            S'exprimer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('myResources') }}">
+                        <span data-feather="file"></span>
+                            Vos ressources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('search') }}">
+                        <span data-feather="shopping-cart"></span>
+                            Recherche
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+
+        <div class="ressource-list text-center col-md-9 col-lg-10">
+            <h4>Bienvenue dans votre espace personnel</h4>
+        </div>
+
+
+{% endblock %}

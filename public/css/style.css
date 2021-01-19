@@ -4,9 +4,20 @@ a{
 #sidebarMenu .nav-link{
     color: black;
 }
+#sidebarMenu{
+    min-height: 90vh;
+
+}
 .navbar{
     background-color: #03989e ;
 }
 .res-title a{
     color : #03989e;
+}
+.crud a{
+    font-size: xx-large;
+    color: #03989e;
+}
+.draft{
+    opacity: 0.5;
 }
