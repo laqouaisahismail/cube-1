@@ -5,6 +5,8 @@ use App\Entity\User;
 use App\Entity\Comment;
 use App\Entity\Ressource;
 use App\Form\RessourceType;
+use App\Form\CommentFormType;
+use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +32,9 @@ class RessourceController extends AbstractController
         $ressource = new Ressource();
         $form = $this->createForm(RessourceType::class, $ressource);
         $form->handleRequest($request);
+
+        $comment = new Comment();
+         $form = $this->createForm(CommentFormType::class, $comment);
 
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -84,6 +89,7 @@ class RessourceController extends AbstractController
 
         return $this->render('ressource/addRessource.html.twig', [
             'form' => $form->createView(),
+            'comment_form' => $form->createView()
         ]);
     }
 
@@ -138,7 +144,9 @@ class RessourceController extends AbstractController
             $form = $this->createForm(RessourceType::class, $ressource);
             $form->handleRequest($request);
     
-    
+           
+
+
             if ($form->isSubmitted() && $form->isValid()) {    
         
                 /** @var UploadedFile $ressourceFile */
@@ -192,13 +200,12 @@ class RessourceController extends AbstractController
             return $this->render('ressource/addRessource.html.twig', [
                 'form' => $form->createView(),
             ]);
-            $comment = new Comment();  
-            $form = $this->createForm(CommentType::class, $comment); 
+           
+            
 
             }
 
-            
-            
+        
 
            
 
