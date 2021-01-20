@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Ressource;
 use App\Form\RessourceType;
 use App\Form\CommentFormType;
+use App\Form\CommentType;
 use App\Repository\CommentRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -123,7 +126,6 @@ class RessourceController extends AbstractController
         public function listMyRessources(UserInterface $user) : Response
         {
             $repository = $this->getDoctrine()->getRepository(Ressource::class);
-            //$ressources = $repository->findAll();
 
             $ressources = $repository->findBy(
                 ['iduser' => $user->getId()],
@@ -253,16 +255,58 @@ class RessourceController extends AbstractController
         /**
          * @Route("/ressource/view/{id}", name="viewRessource")
         */
-        public function viewRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
+        public function viewRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource, UserInterface $user): Response
         {
+ 
+
+            if($ressource->getStatut() == "publie"){
 
                 $ext = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
 
-            return $this->render('ressource/viewRessource.html.twig', [
-                'ressource' => $ressource,
-                'ext' => $ext,
+                $comment = new Comment();
+                $form = $this->createForm(CommentType::class, $comment);
+                $form->handleRequest($request);
 
-            ]);
+                $repository = $this->getDoctrine()->getRepository(Comment::class);
+
+                $comments = $repository->findBy(
+                    ['idRessource' => $ressource->getId()],
+                    ['id' => 'DESC']
+                );
+    
+                if ($form->isSubmitted() && $form->isValid()) {
+
+                    $comment->setIdUser($user->getId());
+                    $comment->setIdRessource($ressource->getId());
+                    $comment->setDate(new \DateTime());
+
+                    $manager->persist($comment);
+                    $manager->flush();
+                    return $this->redirectToRoute("viewRessource");
+
+            
+                }
+
+
+
+
+                return $this->render('ressource/viewRessource.html.twig', [
+                    'ressource' => $ressource,
+                    'comments' => $comments,
+                    'ext' => $ext,
+                    'form' => $form->createView(),
+                    ]);
+    
+            }else{
+                $this->addFlash(
+                    'notice',
+                    'La ressource que vous recherchez n\'est pas disponible'
+                );
+                return $this->redirectToRoute("ressources");
+
+
+            }
+
 
 
             }

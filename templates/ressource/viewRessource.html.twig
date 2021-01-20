@@ -8,8 +8,6 @@
 </style>
 <div class="ressource-list text-center">
 
-
-
     {% set media =  asset('uploads/medias/' ~ ressource.media) %}
     {% set ressourceId =  ressource.id %}
 
@@ -36,5 +34,22 @@
         </div>
         <br><br>
 </div>
+{% if app.user %}
+    {{ form_start(form) }}
+
+        {{ form_errors(form) }}
+        {{ form_row(form.Content, { 'label': 'Commentez!','attr': {'value' : ''} }) }}
+        {{ form_row(form.Envoyer) }}
+
+    {{ form_end(form) }}
+
+{% else %}
+    <p>Connectez-vous si vous souhaitez commenter !</p>
+{% endif %}
+
+{% for comment in comments %}
+    <hr>
+    {{comment.content}}
+{% endfor %}
 
 {% endblock %}
