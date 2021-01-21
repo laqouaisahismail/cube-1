@@ -34,6 +34,7 @@
         </div>
         <br><br>
 </div>
+
 {% if app.user %}
     {{ form_start(form) }}
 
@@ -46,10 +47,20 @@
 {% else %}
     <p>Connectez-vous si vous souhaitez commenter !</p>
 {% endif %}
-
+<div class="commentaires">
 {% for comment in comments %}
-    <hr>
-    {{comment.content}}
+    <div class="comment">
+        {% for user in users %}
+            {% if comment.idUser == user.id %}
+                <p><strong>{{user.username}}</strong> le {{comment.date|date("d/m/Y") }}</p> 
+            {% endif %}
+        {% endfor %}
+
+        {{comment.content}}
+
+    </div>
 {% endfor %}
+
+</div>
 
 {% endblock %}
