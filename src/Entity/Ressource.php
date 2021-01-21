@@ -157,4 +157,9 @@ class Ressource
             'statut' => $this->getStatut()
         ];
     }
+
+    public function getMediaPath()
+    {
+        return 'uploads/medias/'.$this->getMedia();
+    }
 }

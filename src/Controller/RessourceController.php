@@ -19,6 +19,30 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RessourceController extends AbstractController
 {
+
+    /**
+     * @Route("/resources")
+     */
+    public function listResources(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        $ressources = $repository->findAll();
+
+        $ressourceJson = [];
+        foreach ($ressources as $key => $ressource) {
+            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+        }
+        foreach($ressources as $key => $ress) {
+            array_push($ressourceJson, $ress->jsonSerialize());
+        }
+        $response = new Response();
+        $response->setContent(json_encode($ressourceJson));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
+
+    
     /**
      * @Route("/resources/{id}")
      */
@@ -55,6 +79,33 @@ class RessourceController extends AbstractController
         $response->setContent(json_encode($ressourceJson));
         $response->headers->set('Content-Type', 'application/json');
         $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
+
+    /**
+     * @Route("/resourcestimeline", name="searchByDate")
+     */
+    public function listResourcesByDate(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        //$ressources = $repository->findAll();
+        $ressources = $repository->findBy(
+            ['statut' => 'publie'],
+            ['date' => 'DESC']
+        );
+
+        $ressourceJson = [];
+        foreach ($ressources as $key => $ressource) {
+            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+        }
+        foreach($ressources as $key => $ress) {
+            array_push($ressourceJson, $ress->jsonSerialize());
+        }
+        $response = new Response();
+        $response->setContent(json_encode($ressourceJson));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+        
         return $response;
     }
 
