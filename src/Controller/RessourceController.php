@@ -14,7 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class RessourceController extends AbstractController
-{/**
+{
+    /**
      * @Route("/resources")
      */
     public function listResources(): Response
