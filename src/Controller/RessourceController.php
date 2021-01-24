@@ -18,7 +18,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class RessourceController extends AbstractController
-{/**
+{
+    /**
      * @Route("/resources")
      */
     public function listResources(): Response
