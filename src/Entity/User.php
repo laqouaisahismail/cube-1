@@ -57,6 +57,7 @@ class User implements UserInterface
 
     public $confirm_password;
 
+
     public function getId(): ?int
     {
         return $this->id;

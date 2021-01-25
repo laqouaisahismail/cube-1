@@ -77,6 +77,8 @@ class SecurityController extends AbstractController
     public function signin(Request $request)
     {
         $user = $this->getUser();
+        echo $this->getUser()->getId();
+
         return $this->json([
             'login' => 'successful',
             'id' => $user->getId(),
