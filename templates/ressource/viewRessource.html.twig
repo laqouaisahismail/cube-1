@@ -36,19 +36,22 @@
 </div>
 
 {% if app.user %}
+<div class="col-6 mx-auto">
     {{ form_start(form) }}
-
         {{ form_errors(form) }}
         {{ form_row(form.Content, { 'label': 'Commentez!','attr': {'value' : ''} }) }}
         {{ form_row(form.Envoyer) }}
-
     {{ form_end(form) }}
 
+</div>
 {% else %}
+
     <p>Connectez-vous si vous souhaitez commenter !</p>
 {% endif %}
-<div class="commentaires">
+<div class="commentaires text-center">
+<p><strong>{{comments|length }}</strong> commentaires</p>
 {% for comment in comments %}
+    <hr>
     <div class="comment">
         {% for user in users %}
             {% if comment.idUser == user.id %}
