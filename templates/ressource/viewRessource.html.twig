@@ -45,24 +45,24 @@
 
 </div>
 {% else %}
-
     <p>Connectez-vous si vous souhaitez commenter !</p>
 {% endif %}
+
 <div class="commentaires text-center">
-<p><strong>{{comments|length }}</strong> commentaires</p>
-{% for comment in comments %}
-    <hr>
-    <div class="comment">
-        {% for user in users %}
-            {% if comment.idUser == user.id %}
-                <p><strong>{{user.username}}</strong> le {{comment.date|date("d/m/Y") }}</p> 
-            {% endif %}
-        {% endfor %}
+    <p><strong>{{comments|length }}</strong> commentaires</p>
+    {% for comment in comments %}
+        <hr>
+        <div class="comment">
+            {% for user in users %}
+                {% if comment.idUser == user.id %}
+                    <p><strong>{{user.username}}</strong> le {{comment.date|date("d/m/Y") }}</p> 
+                {% endif %}
+            {% endfor %}
 
-        {{comment.content}}
+            {{comment.content}}
 
-    </div>
-{% endfor %}
+        </div>
+    {% endfor %}
 
 </div>
 
