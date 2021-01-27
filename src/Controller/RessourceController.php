@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Ressource;
+use App\Entity\User;
 use App\Form\RessourceType;
+use App\Form\CommentType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -11,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class RessourceController extends AbstractController
@@ -25,6 +29,7 @@ class RessourceController extends AbstractController
         $ressource = new Ressource();
         $form = $this->createForm(RessourceType::class, $ressource);
         $form->handleRequest($request);
+
 
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -78,6 +83,7 @@ class RessourceController extends AbstractController
 
         return $this->render('ressource/addRessource.html.twig', [
             'form' => $form->createView(),
+            'comment_form' => $form->createView()
         ]);
     }
 
@@ -119,7 +125,6 @@ class RessourceController extends AbstractController
         public function listMyRessources(UserInterface $user) : Response
         {
             $repository = $this->getDoctrine()->getRepository(Ressource::class);
-            //$ressources = $repository->findAll();
 
             $ressources = $repository->findBy(
                 ['iduser' => $user->getId()],
@@ -249,16 +254,65 @@ class RessourceController extends AbstractController
         /**
          * @Route("/ressource/view/{id}", name="viewRessource")
         */
-        public function viewRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
+        public function viewRessource(Request $request, EntityManagerInterface $manager, Ressource $ressource,TokenStorageInterface $token): Response
         {
+
+            $user = $token->getToken()->getUser();
+            $isAuthenticated = $token->getToken()->isAuthenticated();
+
+            if($ressource->getStatut() == "publie"){
 
                 $ext = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
 
-            return $this->render('ressource/viewRessource.html.twig', [
-                'ressource' => $ressource,
-                'ext' => $ext,
+                $comment = new Comment();
+                //$users = new User();
 
-            ]);
+                $repository = $this->getDoctrine()->getRepository(User::class);
+                $users = $repository->findAll();
+
+                $repository = $this->getDoctrine()->getRepository(Comment::class);
+                $comments = $repository->findBy(
+                    ['idRessource' => $ressource->getId()],
+                    ['id' => 'DESC']
+                );
+                if ($isAuthenticated) {
+                    
+                
+                    $form = $this->createForm(CommentType::class, $comment);
+                    $form->handleRequest($request);
+                    
+        
+                    if ($form->isSubmitted() && $form->isValid()) {
+
+                        $comment->setIdUser($user->getId());
+                        $comment->setIdRessource($ressource->getId());
+                        $comment->setDate(new \DateTime());
+
+                        $manager->persist($comment);
+                        $manager->flush();
+                        return $this->redirectToRoute('viewRessource', ['id' => $ressource->getId()]);
+
+                    }
+                }
+
+                return $this->render('ressource/viewRessource.html.twig', [
+                    'ressource' => $ressource,
+                    'users' => $users,
+                    'comments' => $comments,
+                    'ext' => $ext,
+                    'form' => $form->createView(),
+                    ]);
+    
+            }else{
+                $this->addFlash(
+                    'notice',
+                    'La ressource que vous recherchez n\'est pas disponible'
+                );
+                return $this->redirectToRoute("ressources");
+
+
+            }
+
 
 
             }
