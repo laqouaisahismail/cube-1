@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Ressource;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,5 +47,71 @@ class BackOfficeController extends AbstractController
             };
 
         return $this->redirectToRoute("adminUsers");
+    }
+    
+    /**
+    * @Route("/admin/ressources", name="adminRessources")
+    */
+    public function Ressources(): Response
+    {
+
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        $ressources = $repository->findAll();
+
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $users = $repository->findAll();
+
+
+        return $this->render('back_office/ressources.html.twig', [
+            'ressources' => $ressources,
+            'users' => $users,
+        ]);
+    }
+    
+    /**
+    * @Route("/admin/ressource/delete/{id}", name="RessourceDelete")
+    */
+    public function ressourceDelete(EntityManagerInterface $manager, Ressource $ressource): Response
+    {
+        $manager->remove($ressource);
+
+        if ( $manager->flush()) {
+
+            $this->addFlash('notice', 'La ressource a eté bien supprimé !');
+            };
+
+        return $this->redirectToRoute("adminRessources");
+    } 
+    
+    /**
+    * @Route("/admin/ressource/suspend/{id}", name="RessourceSuspend")
+    */
+    public function RessourceSuspend(EntityManagerInterface $manager, Ressource $ressource): Response
+    {
+        $ressource->setStatut("suspendu");
+        $manager->persist($ressource);
+
+        if ( $manager->flush()) {
+
+            $this->addFlash('notice', 'La ressource a eté bien suspendue !');
+            };
+
+        return $this->redirectToRoute("adminRessources");
+    }  
+    
+    /**
+    * @Route("/admin/ressource/publish/{id}", name="RessourcePublish")
+    */
+    public function RessourcePublish(EntityManagerInterface $manager, Ressource $ressource): Response
+    {
+        $ressource->setStatut("publie");
+        $manager->persist($ressource);
+
+        if ( $manager->flush()) {
+
+            $this->addFlash('notice', 'La ressource a eté bien publié !');
+            };
+
+        return $this->redirectToRoute("adminRessources");
     }
 }
