@@ -28,12 +28,12 @@
                                     <th><a target="_blank" href="{{  path('viewRessource', {'id':ressource.id}) }}">{{ ressource.media}}</a></th>
                                     <th>{{ ressource.date|date("d/m/Y à h:i") }}</th>
                                     <th>
-                                    {% for user in users %}
-                                        {% if user.id ==  ressource.iduser %}
-                                            id: {{ ressource.iduser}} <br>
-                                            username: {{user.username}}
-                                        {% endif %}
-                                    {% endfor %}
+										{% for user in users %}
+											{% if user.id ==  ressource.iduser %}
+												id: {{ ressource.iduser}} <br>
+												user: {{user.username}}
+											{% endif %}
+										{% endfor %}
                                     </th>
                                     <th>{{ ressource.categorie}}</th>
                                     <th>{{ ressource.statut}}</th>
@@ -41,7 +41,6 @@
 									<th><a class="btn btn-outline-warning" href="{{  path('RessourceSuspend', {'id':ressource.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir suspendre cet ressource ?');"><i class="fas fas fa-ban fa-lg"></i></th>
 									<th><a class="btn btn-outline-success" href="{{  path('RessourcePublish', {'id':ressource.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir publier cet ressource ?');"><i class="fas fa-plus fa-lg"></i></th>
                                 </tr>
-								
 
                                 {% endfor %}
 				</table>
