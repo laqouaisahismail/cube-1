@@ -40,13 +40,15 @@
                 {% set ext =  extension[ressourceId] %}
                 <hr>
                     <div class="ressource">
-                        <p>
-                        {% for user in users %}
-                            {% if user.id ==  ressourceId %}
-                                {{user.username}}
-                            {% endif %}
-                        {% endfor %}
-                        </p>
+                        {% if not crud %}
+                            <p class="text-right text-secondary mx-5">
+                            {% for user in users %}
+                                {% if user.id == ressource.iduser %}
+                                    {{user.username}}
+                                {% endif %}
+                            {% endfor %}
+                            </p>
+                        {% endif %}
                         <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
 
                         {% if ressource.statut == 'brouillon' %}

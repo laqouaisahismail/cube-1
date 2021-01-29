@@ -94,7 +94,6 @@ class RessourceController extends AbstractController
         public function listRessources() : Response
         {
             $repository = $this->getDoctrine()->getRepository(Ressource::class);
-            //$ressources = $repository->findAll();
             $ressources = $repository->findBy(
                 ['statut' => 'publie'],
                 ['id' => 'DESC']
