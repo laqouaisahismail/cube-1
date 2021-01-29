@@ -3,16 +3,15 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-<center>
-    
-    <h1> Bienvenue sur notre application de partage de ressources (RE)SOURCES RELATIONNELLES !</h1>
-    <h2> Vous pouvez vous connecter ou vous inscrire !</h2>
-
-
-<button type "submit" class "btn btn-success">Voir les ressources  </button>
-<button type "submit" class "btn btn-success">Publier une ressource </button>
-<button type "submit" class "btn btn-success">Gestion du profil</button>
-
-</center>
-
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column text-center text-white">
+    <div class="opa"></div>
+      <main role="main" class="inner cover">
+        <h1 class="cover-heading">(RE)SOURCES RELATIONNELLES</h1>
+        <p class="lead">Bienvenue sur notre application de partage de ressources !</p>
+        <p class="lead">
+          <a href="{{  path('ressources') }}" class="btn btn-lg btn-info">Ressources</a>
+          <a href="{{  path('security_registration') }}" class="btn btn-lg btn-info">Inscription</a>
+        </p>
+      </main>
+    </div>
 {% endblock %}

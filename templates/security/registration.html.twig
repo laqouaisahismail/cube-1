@@ -1,12 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="w-50 mx-auto my-3">
+
+
 <h1> Inscription   </h1>
 {{ form_start(form) }}
+
 {{ form_row(form._token) }}
+
 {{ form_row(form.username, {'label' : 'Nom d\'utilisateur','attr': {'placeholder' : 'Nom d\'utilisateur..'}}) }}
 
-{{ form_row(form.nom, {'label' : 'Nom','attr': {'placeholder' : 'Nom...'}}) }}
+{{ form_row(form.nom, {'label' : 'Nom et prénom','attr': {'placeholder' : 'Nom...'}}) }}
 
 {{ form_row(form.email, {'label' : 'Adresse Email','attr': {'placeholder' : 'Adresse mail...'}}) }}
 
@@ -15,5 +20,6 @@
 {{ form_row(form.confirm_password, {'label' : 'Confirmation du mot de passe','attr': {'placeholder' : 'Confirmation du mot de passe...'}}) }} 
 
 
-<button type "submit" class "btn btn-success">Inscription  </button>
+<button type="submit" class="btn btn-info">Inscription</button>
+</div>
 {%  endblock   %}

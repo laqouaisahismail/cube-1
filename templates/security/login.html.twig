@@ -2,25 +2,26 @@
 
 
 {% block body %}
+<div class="w-25 mx-auto my-3">
 
-<h1> Connexion </h1>
+    <h1> Connexion </h1>
 
-<form action="{{ path('security_login') }}" method="post">
-<div class="form_group">
-    <input placeholder="Adresse email..." required name ="_username"
-    type="texte" class="form-control">
+    <form action="{{ path('security_login') }}" method="post">
+        <div class="form_group">
+            <input placeholder="Adresse email..." required name ="_username"
+            type="texte" class="form-control">
+        </div>
+
+        <div class="form_group my-2">
+            <input placeholder="Mot de passe..." required name ="_password"
+            type="password" class="form-control">
+        </div>
+
+        <div class="form_group">
+            <button type="submit" class="btn btn-info">Connexion</button>
+        </div>
+    </form>
 </div>
-
-<div class="form_group">
-    <input placeholder="Mot de passe..." required name ="_password"
-    type="password" class="form-control">
-</div>
-
-<div class="form_group">
-    <button type= "submit" class="btn btn-sucess">Connexion  </button>
-</div>
-</form>
-
 
 
 

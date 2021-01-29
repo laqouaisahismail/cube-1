@@ -4,9 +4,9 @@
 
 {% block body %}
 
-    <div class="row">
+    <div class="row ressources-row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-fixed pt-3">
+            <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="{{  path('addRessource') }}">
@@ -34,15 +34,19 @@
 
         <div class="ressource-list text-center col-md-9 col-lg-10">
 
-            {# <h1 class="text-center">Liste des ressources</h1> #}
-
-
             {% for ressource in ressources %}
                 {% set media =  asset('uploads/medias/' ~ ressource.media) %}
                 {% set ressourceId =  ressource.id %}
                 {% set ext =  extension[ressourceId] %}
                 <hr>
                     <div class="ressource">
+                        <p>
+                        {% for user in users %}
+                            {% if user.id ==  ressourceId %}
+                                {{user.username}}
+                            {% endif %}
+                        {% endfor %}
+                        </p>
                         <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
 
                         {% if ressource.statut == 'brouillon' %}

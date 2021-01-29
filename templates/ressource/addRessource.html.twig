@@ -4,21 +4,19 @@
 
 {% block body %}
 
-<div class="example-wrapper">
+<div class="w-50 mx-auto my-3">
     <h1>Publier une ressource</h1>
     {{form(form)}}
 
-{{ form_start(form) }}
-    {{ form_errors(form) }}
-    {{ form_row(form.titre) }}
-    {{ form_row(form.categorie) }}
-    {{ form_row(form.contenu) }}
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.titre) }}
+        {{ form_row(form.categorie) }}
+        {{ form_row(form.contenu) }}
 
-    {{ form_row(form.submit, { 'label': 'Publier' }) }}
+        {{ form_row(form.submit, { 'label': 'Publier' }) }}
 
-{{ form_end(form) }}
-
-
+    {{ form_end(form) }}
 
 </div>
 {% endblock %}

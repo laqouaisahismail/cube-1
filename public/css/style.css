@@ -21,4 +21,35 @@ a{
 .draft{
     opacity: 0.5;
 }
+.ressources-row{
+    max-width: 100%;
+
+}
+.position-sticky{
+    top: 0;
+    font-size: 1.3rem;
+}
+.cover-container{
+    background-image: url("../images/home_bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    min-height: 90vh;
+    position: relative;
+    justify-content: center;
+}
+main{
+    z-index: 2;
+}
+.opa::after {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.3);
+    content: "";
+    pointer-events: none;
+  }
 

@@ -100,6 +100,10 @@ class RessourceController extends AbstractController
                 ['id' => 'DESC']
             );
 
+            $repository = $this->getDoctrine()->getRepository(User::class);
+            $users = $repository->findAll();
+
+
             if(!empty($ressources)){
                 foreach ($ressources as $key => $ressource){
                     $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
@@ -114,6 +118,7 @@ class RessourceController extends AbstractController
                 'ressources' => $ressources,
                 'extension' => $ext,
                 'crud' => false,
+                'users' => $users,
 
 
             ]);

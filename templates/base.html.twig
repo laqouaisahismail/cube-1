@@ -17,7 +17,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light">
+        <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{{  path('home') }}">
                     <img src="{{ asset('images/logo_nav.png') }}" alt="" width="" height="70" class="d-inline-block align-top">
@@ -27,20 +27,20 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
+                        <li class="nav-item active">
                         <a class="nav-link" aria-current="page" href="{{  path('ressources') }}">Ressources</a>
                         </li>
                         {% if not app.user %}
-                        <li class="nav-item">
+                        <li class="nav-item active ">
                         <a href="{{ path ('security_login')}}" class="nav-link">
                         Connexion</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item active">
                         <a href="{{ path ('security_registration')}}" class="nav-link">
                         Inscription</a>
                         </li>
                          {% else %}
-                         <li class="nav-item">
+                         <li class="nav-item active">
                         <a href="{{ path ('security_logout')}}" class="nav-link">
                         Deconnexion</a>
                         </li>
@@ -48,11 +48,13 @@
 
 
                     </ul>
-                    <form class="d-flex"  action="{{  path('navSearch') }}">
-                        <input id="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
-                        <button class="btn btn-light mx-3" type="submit">Rechercher</button>
-                    </form>
-                    <a class="btn btn-light" href="{{  path('search') }}">Outil de recherche</a>
+                    <div class="search-form ml-auto d-flex">
+                        <form class="d-flex"  action="{{  path('navSearch') }}">
+                            <input id="keyword" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
+                            <button class="btn btn-info mx-3" type="submit">Rechercher</button>
+                        </form>
+                        <a class="btn btn-info" href="{{  path('search') }}">Outil de recherche</a>
+                    </div>
 
                 </div>
             </div>
