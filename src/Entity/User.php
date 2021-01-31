@@ -57,6 +57,10 @@ class User implements UserInterface
 
     public $confirm_password;
 
+     /**
+      * @ORM\Column(type="string", unique=true, nullable=true)
+      */
+    private $apiToken;
 
     public function getId(): ?int
     {
@@ -104,6 +108,11 @@ class User implements UserInterface
         return $this->role;
     }
 
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
     public function setRole(?string $role): self
     {
         $this->role = $role;
@@ -119,6 +128,13 @@ class User implements UserInterface
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function setApiToken($apiToken): self
+    {
+        $this->apiToken = $apiToken;
 
         return $this;
     }

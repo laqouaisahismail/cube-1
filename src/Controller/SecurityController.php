@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-
-
+use App\Entity\ApiToken;
 use App\Entity\User;
 use App\Form\RegistrationType;
 use Doctrine\Persistence\ObjectManager;
@@ -12,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
@@ -19,7 +19,7 @@ class SecurityController extends AbstractController
 {
 
     /**
-     * @Route("/signup", name="security_signup", methods={"POST"})
+     * @Route("/flutter/signup", name="security_signup", methods={"POST"})
      */
     public function signup(
         Request $request,
@@ -103,24 +103,71 @@ class SecurityController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
+    
     /**
-     * @Route("/signin", name="security_signin", methods={"POST"})
+     * @Route("/flutter/signin", name="security_signin", methods={"POST"})
      */
-    public function signin(Request $request)
+    public function signin(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
-        $user = $this->getUser();
-        echo $this->getUser()->getId();
+ 
+        $data = json_decode($request->getContent(), true);
+
+        //$user = $this->getUser();
+        $user = $data['email'];
+        $pass = $data['password'];
+
+        $user = $this->getDoctrine()->getRepository('App:User')->findOneBy(['email' => $user]);
+        if ($user === null) {
+            return $this->json([
+                'login' => 'failure',
+                'user' => 'null',
+            ]);
+        }
+
+        if($user->getEmail() == $data['email'] && $encoder->isPasswordValid($user, $data['password'], $user->getSalt())) {
+
+            $apiToken = new ApiToken($user);
+            $manager->persist($apiToken);
+            $manager->flush();
+
+            return $this->json([
+                'login' => 'successful',
+                'username' => $user->getUsername(),
+                'token' => $apiToken->getToken(),
+            ]); 
+        }
 
         return $this->json([
-            'login' => 'successful',
-            'id' => $user->getId(),
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            'password' => 'who knows ?',
-            'name' => $user->getNom(),
+            'login' => 'failure',
         ]);
     }
+
+    /**
+     * @Route("/flutter/profile", name="getProfile", methods={"POST"})
+     */
+    public function getProfile(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    {
+ 
+        $token = $request->headers->get('X-AUTH-TOKEN');
+        echo $token;
+        $token = $this->getDoctrine()->getRepository('App:ApiToken')->findOneBy(['token' => $token]);
+        $now = new \DateTime();
+        if ($token !== null && $token->getExpiresAt() > $now) {
+
+            return $this->json([
+                'operation' => 'success',
+                'username' => $token->getUser()->getUsername(),
+                'email' => $token->getUser()->getEmail(),
+                'name' => $token->getUser()->getNom(),
+            ]); 
+        }
+
+        return $this->json([
+            'operation' => 'failure',
+        ]);
+    }
+
+
 
     /**
      * @Route("/connexion",name="security_login")
@@ -128,6 +175,15 @@ class SecurityController extends AbstractController
     public function login()
     {
         return $this->render('security/login.html.twig');
+    }
+
+    /**
+     * @Route("/flutter/signout", name="signout")
+     */
+    public function signout() {
+        return $this->json([
+            'logout' => 'success'
+        ]);
     }
 
 
