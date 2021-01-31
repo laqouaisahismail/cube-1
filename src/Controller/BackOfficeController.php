@@ -120,7 +120,7 @@ class BackOfficeController extends AbstractController
     /**
     * @Route("/admin/statistics", name="Statistics")
     */
-    public function Statistics(EntityManagerInterface $manager, Ressource $ressource ): Response
+    public function Statistics(EntityManagerInterface $manager): Response
     {
 
         $repository = $this->getDoctrine()->getRepository(Ressource::class);
