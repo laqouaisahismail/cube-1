@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Ressource;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\All;
 
 class BackOfficeController extends AbstractController
 {
@@ -113,5 +115,27 @@ class BackOfficeController extends AbstractController
             };
 
         return $this->redirectToRoute("adminRessources");
+    }
+    
+    /**
+    * @Route("/admin/statistics", name="Statistics")
+    */
+    public function Statistics(EntityManagerInterface $manager, Ressource $ressource ): Response
+    {
+
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        $ressources = $repository->findAll();
+
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $users = $repository->findAll();
+
+        $repository = $this->getDoctrine()->getRepository(Comment::class);
+        $comments = $repository->findAll();
+
+        return $this->render('back_office/statistics.html.twig', [
+            'ressources' => $ressources,
+            'comments' => $comments,
+            'users' => $users,
+        ]);
     }
 }
