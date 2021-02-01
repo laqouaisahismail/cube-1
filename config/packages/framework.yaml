@@ -15,3 +15,8 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+    assets:
+        base_urls:
+            - 'http://localhost:8000/uploads/medias/'
+            - 'http://localhost:8000/'

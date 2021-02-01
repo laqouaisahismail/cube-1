@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Entity;
+
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -8,6 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity("email")
  * message=("L'email est deja utilise !")
@@ -22,7 +25,7 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=50, nullable=true, unique=true)
      * @Assert\Email()
      */
     private $email;
@@ -53,6 +56,11 @@ class User implements UserInterface
      */
 
     public $confirm_password;
+
+     /**
+      * @ORM\Column(type="string", unique=true, nullable=true)
+      */
+    private $apiToken;
 
     public function getId(): ?int
     {
@@ -100,6 +108,11 @@ class User implements UserInterface
         return $this->role;
     }
 
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
     public function setRole(?string $role): self
     {
         $this->role = $role;
@@ -119,6 +132,13 @@ class User implements UserInterface
         return $this;
     }
 
+    public function setApiToken($apiToken): self
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
     public function eraseCredentials() {}
     public function getSalt() {}
     
@@ -126,5 +146,4 @@ class User implements UserInterface
         return ['ROLE_USER'];
 
     }
-
 }
