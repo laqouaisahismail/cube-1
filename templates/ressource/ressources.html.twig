@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Ressources{% endblock %}
 
 {% block body %}
 
     <div class="row ressources-row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
+                <ul class="nav flex-column primary">
                     <li class="nav-item">
                         <a class="nav-link" href="{{  path('addRessource') }}">
                         <span data-feather="home"></span>
@@ -41,7 +41,7 @@
                 <hr>
                     <div class="ressource">
                         {% if not crud %}
-                            <p class="text-right text-secondary mx-5">
+                            <p class="text-secondary mx-5">
                             {% for user in users %}
                                 {% if user.id == ressource.iduser %}
                                     {{user.username}}
