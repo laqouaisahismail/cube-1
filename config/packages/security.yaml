@@ -10,6 +10,10 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        in_session: 
+            entity:
+                class: App\Entity\User
+                property: apiToken
 
     firewalls:
         dev:
@@ -23,13 +27,35 @@ security:
                 login_path: security_login
                 check_path: security_login
 
-            json_login:
-                check_path: /signin
-                username_path: email
-
             logout:
                 path: /logout
                 #target: securtity_logout
+            
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+        
+        api: 
+            pattern: ^/flutter/
+            anonymous: lazy
+            provider: in_session
+
+            json_login:
+                check_path: /flutter/signin
+                username_path: email
+                password_path: password
+
+            logout:
+                path: /flutter/signout
+                target: /
+                invalidate_session: true
+
+            guard:
+                authenticators:
+                    - App\Security\TokenAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

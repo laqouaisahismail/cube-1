@@ -20,148 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RessourceController extends AbstractController
 {
     /**
-     * @Route("/resources")
-     */
-    public function listResources(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        $ressources = $repository->findAll();
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    
-    /**
-     * @Route("/resources/{id}")
-     */
-    public function ApiSearchById(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
-    {
-        $response = new Response();
-        $ressource2 = $ressource->jsonSerialize();
-        $response->setContent(json_encode($ressource2));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * @Route("/resources", name="searchByTitle")
-     */
-    public function listResourcesByTitle(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['titre' => $_GET['name']],
-            ['id' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * @Route("/resourcestimeline", name="searchByDate")
-     */
-    public function listResourcesByDate(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['statut' => 'publie'],
-            ['date' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        
-        return $response;
-    }
-
-    /**
-     * @Route("/resources", name="searchByiduser")
-     */
-    public function listResourcesByIduser(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['iduser' => $_GET['name']],
-            ['id' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * @Route("/resources", name="searchByCategory")
-     */
-    public function listResourcesByCategory(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['category' => $_GET['name']],
-            ['id' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * @Route("/ressource/ajout", name="addRessource")
+     * @Route("profile/ressource/ajout", name="addRessource")
      */
     public function AddRessource(Request $request, EntityManagerInterface $manager, UserInterface $user): Response
     {
@@ -170,6 +29,7 @@ class RessourceController extends AbstractController
         $ressource = new Ressource();
         $form = $this->createForm(RessourceType::class, $ressource);
         $form->handleRequest($request);
+
 
 
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -227,21 +87,17 @@ class RessourceController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/ressources", name="ressources")
-     */
-    public function listRessources(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['statut' => 'publie'],
-            ['id' => 'DESC']
-        );
 
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
+        /**
+         * @Route("/ressources", name="ressources")
+        */
+        public function listRessources() : Response
+        {
+            $repository = $this->getDoctrine()->getRepository(Ressource::class);
+            $ressources = $repository->findBy(
+                ['statut' => 'publie'],
+                ['id' => 'DESC']
+            );
 
             $repository = $this->getDoctrine()->getRepository(User::class);
             $users = $repository->findAll();
@@ -320,9 +176,7 @@ class RessourceController extends AbstractController
             }
             return $this->redirectToRoute("myResources");
 
-    }
-
-
+        }
 
         /**
          * @Route("profile/ressource/edit/{id}", name="editRessource")
@@ -398,8 +252,9 @@ class RessourceController extends AbstractController
                 'form' => $form->createView(),
             ]);
 
-        }
-        
+
+            }
+
         /**
          * @Route("/ressource/view/{id}", name="viewRessource")
         */
@@ -459,9 +314,12 @@ class RessourceController extends AbstractController
                 );
                 return $this->redirectToRoute("ressources");
 
+
             }
-            
-        }
+
+
+
+            }
 
         /**
          * @Route("/profile", name="profile")
@@ -471,7 +329,261 @@ class RessourceController extends AbstractController
 
             return $this->render('profile.html.twig', [
                 'user' => $user,
-                ]);
+
+            ]);
+
 
         }
+
+
+    /**
+     * @Route("/resources")
+     */
+    public function listResources(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        $ressources = $repository->findAll();
+
+        $ressourceJson = [];
+        foreach ($ressources as $key => $ressource) {
+            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+        }
+        foreach ($ressources as $key => $ress) {
+            array_push($ressourceJson, $ress->jsonSerialize());
+        }
+        $response = new Response();
+        $response->setContent(json_encode($ressourceJson));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
+
+
+    /**
+     * @Route("/resources/{id}")
+     */
+    public function ApiSearchById(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
+    {
+        $response = new Response();
+        $ressource2 = $ressource->jsonSerialize();
+        $response->setContent(json_encode($ressource2));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
+
+    /**
+     * @Route("/resources", name="searchByTitle")
+     */
+    public function listResourcesByTitle(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        //$ressources = $repository->findAll();
+        $ressources = $repository->findBy(
+            ['titre' => $_GET['name']],
+            ['id' => 'DESC']
+        );
+
+        $ressourceJson = [];
+        foreach ($ressources as $key => $ressource) {
+            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+        }
+        foreach ($ressources as $key => $ress) {
+            array_push($ressourceJson, $ress->jsonSerialize());
+        }
+        $response = new Response();
+        $response->setContent(json_encode($ressourceJson));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
+
+    /**
+     * @Route("/resourcestimeline", name="searchByDate")
+     */
+    public function listResourcesByDate(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        //$ressources = $repository->findAll();
+        $ressources = $repository->findBy(
+            ['statut' => 'publie'],
+            ['date' => 'DESC']
+        );
+
+        $ressourceJson = [];
+        foreach ($ressources as $key => $ressource) {
+            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+        }
+        foreach ($ressources as $key => $ress) {
+            array_push($ressourceJson, $ress->jsonSerialize());
+        }
+        $response = new Response();
+        $response->setContent(json_encode($ressourceJson));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+
+        return $response;
+    }
+
+    /**
+     * @Route("/resources", name="searchByiduser")
+     */
+    public function listResourcesByIduser(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        //$ressources = $repository->findAll();
+        $ressources = $repository->findBy(
+            ['iduser' => $_GET['name']],
+            ['id' => 'DESC']
+        );
+
+        $ressourceJson = [];
+        foreach ($ressources as $key => $ressource) {
+            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+        }
+        foreach ($ressources as $key => $ress) {
+            array_push($ressourceJson, $ress->jsonSerialize());
+        }
+        $response = new Response();
+        $response->setContent(json_encode($ressourceJson));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
+
+    /**
+     * @Route("/resources", name="searchByCategory")
+     */
+    public function listResourcesByCategory(): Response
+    {
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+        //$ressources = $repository->findAll();
+        $ressources = $repository->findBy(
+            ['category' => $_GET['name']],
+            ['id' => 'DESC']
+        );
+
+        $ressourceJson = [];
+        foreach ($ressources as $key => $ressource) {
+            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+        }
+        foreach ($ressources as $key => $ress) {
+            array_push($ressourceJson, $ress->jsonSerialize());
+        }
+        $response = new Response();
+        $response->setContent(json_encode($ressourceJson));
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setStatusCode(Response::HTTP_OK);
+        return $response;
+    }
+
+    /**
+     * @Route("/flutter/profile", name="sendProfile", methods={"GET"})
+     */
+    public function sendProfile(Request $request, UserInterface $user): Response
+    {
+        $token = $request->headers->get('X-AUTH-TOKEN');
+
+        $token = $this->getDoctrine()->getRepository('App:ApiToken')->findOneBy(['token' => $token]);
+        $now = new \DateTime();
+        if ($token !== null && $token->getExpiresAt() > $now) {
+            $user = $token->getUser();
+            return $this->json([
+                'profile' => true,
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'nom' => $user->getNom(),
+            ]);
+        }
+        return $this->json([
+            'profile' => false,
+        ]);
+
+    }
+
+    /**
+     * @Route("/flutter/profile/resource/add", name="addResource", methods={"POST"})
+     */
+    public function AddResource(Request $request, EntityManagerInterface $manager, UserInterface $user): Response
+    {
+
+        $token = $request->headers->get('X-AUTH-TOKEN');
+
+        $token = $this->getDoctrine()->getRepository('App:ApiToken')->findOneBy(['token' => $token]);
+        $now = new \DateTime();
+        if ($token !== null && $token->getExpiresAt() > $now) {
+            $userId = $token->getUser()->getId();
+
+            $data = json_decode($request->getContent(), true);
+            $ressource = new Ressource();
+            $ressource->setTitre($_POST['titre']);
+            $ressource->setContenu($_POST['contenu']);
+            $ressource->setMedia($_POST['mediaName']);
+            $ressource->setCategorie($_POST['categorie']);
+            $ressource->setStatut($_POST['statut']);
+
+
+
+            if (
+                $ressource->getTitre() !== null &&
+                $ressource->getTitre() != '' &&
+                $ressource->getContenu() !== null &&
+                $ressource->getContenu() != '' &&
+                $ressource->getCategorie() !== null &&
+                $ressource->getStatut() !== null
+            ) {
+
+
+                $validExts = array("jpg","jpeg","bmp","png","mp3","ogg","mp4","avi");
+
+                if ($_FILES['media']['name'] != "") {
+                    // Where the file is going to be stored
+                    $target_dir = $this->getParameter('medias_directory');
+                    $file = $_FILES['media']['name'];
+                    $path = pathinfo($file);
+                    $filename = $path['filename'];
+                    $ext = $path['extension'];
+                    $temp_name = $_FILES['media']['tmp_name'];
+                    $filename_server = $filename . '-' . uniqid() . '.' . $ext;
+                    $path_filename_ext = $target_dir. '/' . $filename_server;
+
+                    if (in_array(strtolower($ext), $validExts)){
+                    move_uploaded_file($temp_name, $path_filename_ext);
+                    echo "Congratulations! File Uploaded Successfully.";
+                    }
+                }
+                // ... persist the $ressource variable or any other work
+                
+                $ressource->setMedia($filename_server);
+                $ressource->setDate(new \DateTime());
+                $ressource->setIduser($userId);
+
+                $manager->persist($ressource);
+                $manager->flush();
+
+                /*$this->addFlash(
+                'notice',
+                'Le post a eté bien publié !'
+            );*/
+
+                return $this->json([
+                    'addResource' => true,
+                    'user' => $userId,
+                ]);
+            } else {
+                return $this->json([
+                    'addResource' => false,
+                    'user' => $userId,
+                ]);
+            }
+        } else {
+
+            return $this->json([
+                'addResource' => false,
+                'user' => $token,
+            ]);
+        }
+    }
+
+
 }
