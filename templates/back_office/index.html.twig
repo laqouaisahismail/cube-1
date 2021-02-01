@@ -3,9 +3,43 @@
 {% block title %}Back office{% endblock %}
 
 {% block body %}
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('adminUsers') }}">
+                        <span data-feather="home"></span>
+                            Utilisateurs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('adminRessources') }}">
+                        <span data-feather="file"></span>
+                            Toutes les ressources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('Statistics') }}">
+                        <span data-feather="shopping-cart"></span>
+                            Statistiques
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{  path('search') }}">
+                        <span data-feather="shopping-cart"></span>
+                            Recherche
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </nav>
 
-<div class="example-wrapper">
-    <h1>Bienvenue dans le panneau d'administration ! ✅</h1>
-</div>
+
+
+        <div class="ressource-list text-center col-md-9 col-lg-10">
+            <h1>Bienvenue dans l'administration ! ✅</h1>
+        </div>
 
 {% endblock %}

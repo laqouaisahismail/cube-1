@@ -39,14 +39,12 @@
                         <a href="{{ path ('security_registration')}}" class="nav-link">
                         Inscription</a>
                         </li>
-                         {% else %}
-                         <li class="nav-item active">
+                        {% else %}
+                        <li class="nav-item active">
                         <a href="{{ path ('security_logout')}}" class="nav-link">
                         Deconnexion</a>
                         </li>
                         {% endif %}
-
-
                     </ul>
                     <div class="search-form ml-auto d-flex">
                         <form class="d-flex"  action="{{  path('navSearch') }}">
