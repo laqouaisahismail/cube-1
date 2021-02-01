@@ -19,148 +19,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RessourceController extends AbstractController
 {
-
-    /**
-     * @Route("/resources")
-     */
-    public function listResources(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        $ressources = $repository->findAll();
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    
-    /**
-     * @Route("/resources/{id}")
-     */
-    public function ApiSearchById(Request $request, EntityManagerInterface $manager, Ressource $ressource): Response
-    {
-        $response = new Response();
-        $ressource2 = $ressource->jsonSerialize();
-        $response->setContent(json_encode($ressource2));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * @Route("/resources", name="searchByTitle")
-     */
-    public function listResourcesByTitle(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['titre' => $_GET['name']],
-            ['id' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * @Route("/resourcestimeline", name="searchByDate")
-     */
-    public function listResourcesByDate(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['statut' => 'publie'],
-            ['date' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        
-        return $response;
-    }
-
-    /**
-     * @Route("/resources", name="searchByiduser")
-     */
-    public function listResourcesByIduser(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['iduser' => $_GET['name']],
-            ['id' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
-    /**
-     * @Route("/resources", name="searchByCategory")
-     */
-    public function listResourcesByCategory(): Response
-    {
-        $repository = $this->getDoctrine()->getRepository(Ressource::class);
-        //$ressources = $repository->findAll();
-        $ressources = $repository->findBy(
-            ['category' => $_GET['name']],
-            ['id' => 'DESC']
-        );
-
-        $ressourceJson = [];
-        foreach ($ressources as $key => $ressource) {
-            $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
-        }
-        foreach($ressources as $key => $ress) {
-            array_push($ressourceJson, $ress->jsonSerialize());
-        }
-        $response = new Response();
-        $response->setContent(json_encode($ressourceJson));
-        $response->headers->set('Content-Type', 'application/json');
-        $response->setStatusCode(Response::HTTP_OK);
-        return $response;
-    }
-
     /**
      * @Route("/ressource/ajout", name="addRessource")
      */
@@ -173,7 +31,7 @@ class RessourceController extends AbstractController
         $form->handleRequest($request);
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
+		if ($form->isSubmitted() && $form->isValid()) {
 
 
 
@@ -187,7 +45,7 @@ class RessourceController extends AbstractController
                 $originalFilename = pathinfo($ressourceFile->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
                 //$safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
-                $newFilename = $originalFilename . '-' . uniqid() . '.' . $ressourceFile->guessExtension();
+                $newFilename = $originalFilename.'-'.uniqid().'.'.$ressourceFile->guessExtension();
 
                 // Move the file to the directory where medias are stored
                 try {
@@ -218,6 +76,7 @@ class RessourceController extends AbstractController
             );
             
             return $this->redirectToRoute("myResources");
+
 
         }
 
@@ -399,6 +258,7 @@ class RessourceController extends AbstractController
             ]);
 
         }
+        
         /**
          * @Route("/ressource/view/{id}", name="viewRessource")
         */
@@ -458,12 +318,9 @@ class RessourceController extends AbstractController
                 );
                 return $this->redirectToRoute("ressources");
 
-
             }
-
-
-
-            }
+            
+        }
 
         /**
          * @Route("/profile", name="profile")
