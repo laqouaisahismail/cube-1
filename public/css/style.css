@@ -61,3 +61,50 @@ main{
   .statistics p strong{
     color: #03989e;
 }
+
+
+label {
+    position: relative;
+  }
+  
+  label input {
+    font-size: 1em;
+    background: transparent;
+    padding: 1rem 1.2rem;
+    width: 350px;
+    border-radius: 5px;
+    border: 2px solid #7a7a7a;
+    transition: all 0.2s;
+  }
+
+  label input:focus {
+    border-color: #ff4754;
+  }
+
+  label .password-icon {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 20px;
+    transition: all 0.2s;
+  }
+  
+  label .password-icon:hover {
+    cursor: pointer;
+    color: #ff4754;
+  }
+  
+  label .password-icon .feather-eye-off {
+    display: none;
+  }
+  .fa-eye{
+    position: absolute;
+    right: 7px;
+    top: 7px;
+  }
+  .form_group{
+    position: relative;
+  }

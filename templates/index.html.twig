@@ -10,7 +10,12 @@
         <p class="lead">Bienvenue sur notre application de partage de ressources !</p>
         <p class="lead">
           <a href="{{  path('ressources') }}" class="btn btn-lg btn-info">Ressources</a>
-          <a href="{{  path('security_registration') }}" class="btn btn-lg btn-info">Inscription</a>
+          {% if app.user %}
+            <a href="{{  path('profile') }}" class="btn btn-lg btn-info">Profile</a>
+          {% else %}
+            <a href="{{  path('security_registration') }}" class="btn btn-lg btn-info">Inscription</a>
+          {% endif %}
+
         </p>
       </main>
     </div>

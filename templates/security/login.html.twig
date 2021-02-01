@@ -13,8 +13,8 @@
         </div>
 
         <div class="form_group my-2">
-            <input placeholder="Mot de passe..." required name ="_password"
-            type="password" class="form-control">
+            <input placeholder="Mot de passe..." required name ="_password" id ="_password"
+            type="password" class="form-control"><i class="fas fa-eye m-1" onclick="oeil()"></i>
         </div>
 
         <div class="form_group">
@@ -25,6 +25,16 @@
 
 
 
+<script>
+    function oeil() {
 
+        var input = document.getElementById("_password");
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+</script>
 
 {% endblock %}
