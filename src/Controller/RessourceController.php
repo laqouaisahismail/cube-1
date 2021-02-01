@@ -580,5 +580,44 @@ class RessourceController extends AbstractController
         }
     }
 
+    
+    /**
+     * @Route("/flutter/profile/resources", name="userResources")
+     */
+    public function listUserResources(Request $request, UserInterface $user): Response
+    {
+        $token = $request->headers->get('X-AUTH-TOKEN');
+
+        $repository = $this->getDoctrine()->getRepository(Ressource::class);
+
+        $token = $this->getDoctrine()->getRepository('App:ApiToken')->findOneBy(['token' => $token]);
+        $now = new \DateTime();
+        if ($token !== null && $token->getExpiresAt() > $now) {
+            $user = $token->getUser();
+
+            $ressources = $repository->findBy(
+                ['iduser' => $user->getId()],
+                ['id' => 'DESC']
+            );
+
+            $ressourceJson = [];
+            foreach ($ressources as $key => $ressource) {
+                $ext[$ressource->getId()] = pathinfo($ressource->getMedia(), PATHINFO_EXTENSION);
+            }
+            foreach ($ressources as $key => $ress) {
+                array_push($ressourceJson, $ress->jsonSerialize());
+            }
+            $response = new Response();
+            $response->setContent(json_encode(['resource' => $ressourceJson]));
+            $response->headers->set('Content-Type', 'application/json');
+            $response->setStatusCode(Response::HTTP_OK);
+            return $response;
+
+        }
+        return $this->json([
+            'status' => 'failure',
+        ]);
+    }
+    
 
 }
