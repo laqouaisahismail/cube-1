@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\RessourceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=RessourceRepository::class)
  */
 class Ressource
@@ -139,5 +141,20 @@ class Ressource
         $this->statut = $statut;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return 
+        [
+            'id' => $this->getId(),
+            'titre' => $this->getTitre(),
+            'contenu' => $this->getContenu(),
+            'media' => $this->getMedia(),
+            'date' => $this->getDate(),
+            'iduser' => $this->getIduser(),
+            'categorie' => $this->getCategorie(),
+            'statut' => $this->getStatut()
+        ];
     }
 }
