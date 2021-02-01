@@ -1,3 +1,9 @@
+.primary{
+    color:  #03989e !important;
+}
+.primary li a{
+    color:  #007377 !important;
+}
 a{
     text-decoration: none;
 }
@@ -52,4 +58,6 @@ main{
     content: "";
     pointer-events: none;
   }
-
+  .statistics p strong{
+    color: #03989e;
+}

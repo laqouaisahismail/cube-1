@@ -3,30 +3,45 @@
 {% block title %}Statistiques{% endblock %}
 
 {% block body %}
+<div class="statistics w-25 mx-auto my-5">
 
-<p>Ressources totales: <strong>{{ ressources|length }}</strong></p>
-<p>Utilisateurs totales: <strong>{{ users|length }}</strong></p>
-<p>Commentaires totales: <strong>{{ comments|length }}</strong></p>
-<p>Ressources publié aujourd'hui:
-{% set i = 0 %}
-{% for ressource in ressources %}
-    {% if  ressource.date|date("d/m/Y") ==  "now"|date("d/m/Y")  %}
-        {% set i = i + 1 %}
-    {% endif %}
-{% endfor %}
-<strong>{{ i }}</strong>
-</p>
+    <p>Ressources totales: <strong>{{ ressources|length }}</strong></p>
+    <p>
+        Brouillons:
+        {% set i = 0 %}
+        {% for ressource in ressources %}
+            {% if  ressource.statut ==  "brouillon"  %}
+                {% set i = i + 1 %}
+            {% endif %}
+        {% endfor %}
+        <strong>{{ i }}</strong>
+    </p>
+    <p>Utilisateurs totales: <strong>{{ users|length }}</strong></p>
+    <p>Commentaires totales: <strong>{{ comments|length }}</strong></p>
 
-<p>Commentaires rajoutés aujourd'hui:
-{% set i = 0 %}
-{% for comment in comments %}
-    {% if  comment.date|date("d/m/Y") ==  "now"|date("d/m/Y")  %}
-        {% set i = i + 1 %}
-    {% endif %}
-{% endfor %}
-<strong>{{ i }}</strong>
-</p>
+    <p>Ressources publié aujourd'hui:
+    {% set i = 0 %}
+    {% for ressource in ressources %}
+        {% if  ressource.date|date("d/m/Y") ==  "now"|date("d/m/Y")  %}
+            {% set i = i + 1 %}
+        {% endif %}
+    {% endfor %}
+    <strong>{{ i }}</strong>
+    </p>
 
+
+
+    <p>
+        Commentaires rajoutés aujourd'hui:
+        {% set i = 0 %}
+        {% for comment in comments %}
+            {% if  comment.date|date("d/m/Y") ==  "now"|date("d/m/Y")  %}
+                {% set i = i + 1 %}
+            {% endif %}
+        {% endfor %}
+        <strong>{{ i }}</strong>
+    </p>
+</div>
 
 
 
