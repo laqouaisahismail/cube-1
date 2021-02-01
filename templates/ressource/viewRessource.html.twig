@@ -8,7 +8,7 @@
 </style>
 <div class="ressource-list text-center">
 
-    {% set media =  asset('uploads/medias/' ~ ressource.media) %}
+    {% set media =  asset(ressource.media) %}
     {% set ressourceId =  ressource.id %}
 
         <div class="ressource my-4">
@@ -52,7 +52,7 @@
     <p><strong>{{comments|length }}</strong> commentaires</p>
     {% for comment in comments %}
         <hr>
-        <div class="comment">
+        <div class="comment py-3">
             {% for user in users %}
                 {% if comment.idUser == user.id %}
                     <p><strong>{{user.username}}</strong> le {{comment.date|date("d/m/Y") }}</p> 

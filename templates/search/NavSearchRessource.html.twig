@@ -14,7 +14,7 @@
 {% if ressources|length > 0 %}
 
 {% for ressource in ressources %}
-    {% set media =  asset('uploads/medias/' ~ ressource.media) %}
+    {% set media =  asset(ressource.media) %}
     {% set ressourceId =  ressource.id %}
     {% set ext =  extension[ressourceId] %}
     <hr>
