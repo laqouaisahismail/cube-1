@@ -171,7 +171,7 @@ class SecurityController extends AbstractController
         }
 
         return $this->json([
-            'login' => 'failure',
+            'error' => 'failure',
         ]);
     }
 
@@ -269,7 +269,9 @@ class SecurityController extends AbstractController
             } else {
                 $hash = $encoder->encodePassword($user, $user->getPassword());
 
-                $user->setPassword($hash);
+                if($change) {
+                    $user->setPassword($hash);
+                }
 
                 $manager = $this->getDoctrine()->getManager();
 
@@ -286,6 +288,8 @@ class SecurityController extends AbstractController
             ]);
         }
     }
+
+
 
     /**
      * @Route("admin/inscription", name="newAdmin")
@@ -312,4 +316,38 @@ class SecurityController extends AbstractController
         }
         return $this->render('back_office/register-admin.html.twig', ['form' => $form->createView()]);
     }
+
+    /**
+     * @Route("/flutter/password", name="changePassword")
+     */
+    public function changePassword(
+        Request $request,
+        UserInterface $user,
+        EntityManagerInterface $manager,
+        UserPasswordEncoderInterface $encoder
+    ): Response {
+        $token = $request->headers->get('X-AUTH-TOKEN');
+
+        $token = $this->getDoctrine()->getRepository('App:ApiToken')->findOneBy(['token' => $token]);
+        $now = new \DateTime();
+        if ($token !== null && $token->getExpiresAt() > $now) {
+            $user = $token->getUser();
+            $data = json_decode($request->getContent(), true);
+
+            if ($encoder->isPasswordValid($user, $data['password'], $user->getSalt())) {
+                return $this->json([
+                    'password' => 'is valid',
+                ]);
+            } else {
+                return $this->json([
+                    'password' => 'invalid',
+                ]);
+            }
+        } else {
+            return $this->json([
+                'result' => 'failure'
+            ]);
+        }
+    }
+
 }
