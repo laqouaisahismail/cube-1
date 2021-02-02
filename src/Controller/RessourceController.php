@@ -534,7 +534,7 @@ class RessourceController extends AbstractController
             ) {
 
 
-                $validExts = array("jpg","jpeg","bmp","png","mp3","ogg","mp4","avi");
+                $validExts = array("jpg","jpeg","bmp","png","mp3","ogg","mp4","avi","pdf");
 
                 if ($_FILES['media']['name'] != "") {
                     // Where the file is going to be stored

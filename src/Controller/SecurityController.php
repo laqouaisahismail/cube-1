@@ -51,7 +51,7 @@ class SecurityController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
 
 
-            $user = $user->setRole("user");
+            $user->addRole("ROLE_USER");
 
 
             $manager->persist($user);
@@ -75,6 +75,7 @@ class SecurityController extends AbstractController
     public function registration(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder) {
 
         $user = new User();
+
         $form = $this->createForm(RegistrationType::class, $user);
 
         $form->handleRequest($request);
@@ -85,9 +86,7 @@ class SecurityController extends AbstractController
 
             $manager = $this->getDoctrine()->getManager();
 
-
-            $user = $user->setRole("user");
-
+            $user->addRole("ROLE_USER");
 
             $manager->persist($user);
             $manager->flush();
@@ -288,6 +287,34 @@ class SecurityController extends AbstractController
                 'success' => false,
             ]);
         }
+    }
+
+
+
+    /**
+     * @Route("admin/inscription", name="newAdmin")
+     */
+    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
+
+        $user = new User();
+        $form = $this->createForm(RegistrationType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
+
+            $user->addRole("ROLE_ADMIN");
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Votre compte à bien été enregistré.');
+
+        }
+        return $this->render('back_office/register-admin.html.twig', ['form' => $form->createView()]);
     }
 
     /**

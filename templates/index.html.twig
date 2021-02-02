@@ -10,8 +10,10 @@
         <p class="lead">Bienvenue sur notre application de partage de ressources !</p>
         <p class="lead">
           <a href="{{  path('ressources') }}" class="btn btn-lg btn-info">Ressources</a>
-          {% if app.user %}
+          {% if is_granted('ROLE_USER') %}
             <a href="{{  path('profile') }}" class="btn btn-lg btn-info">Profil</a>
+          {% elseif is_granted('ROLE_ADMIN') %}
+            <a href="{{  path('adminHome') }}" class="btn btn-lg btn-info">Administration</a>
           {% else %}
             <a href="{{  path('security_registration') }}" class="btn btn-lg btn-info">Inscription</a>
           {% endif %}
