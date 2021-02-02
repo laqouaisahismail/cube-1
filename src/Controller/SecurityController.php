@@ -72,11 +72,7 @@ class SecurityController extends AbstractController
     /**
      * @Route("/inscription", name="security_registration")
      */
-    public function registration(
-        Request $request,
-        EntityManagerInterface $manager,
-        UserPasswordEncoderInterface $encoder
-    ) {
+    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder) {
 
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
@@ -113,23 +109,30 @@ class SecurityController extends AbstractController
         $old_pwd = $request->get('old_password');
         $new_pwd = $request->get('new_password');
         $new_pwd_confirm = $request->get('new_password_confirm');
+
+
         $user = $this->getUser();
         $checkPass = $passwordEncoder->isPasswordValid($user, $old_pwd);
 
-        if ($checkPass === true) {
-            $new_pwd_encoded = $passwordEncoder->encodePassword($user, $new_pwd_confirm);
-            $user->setPassword($new_pwd_encoded);
-            $manager->persist($user);
-
-            if ($manager->flush()) {
-
+        if( $new_pwd ===  $new_pwd_confirm){
+            if($checkPass === true) {
+                $new_pwd_encoded = $passwordEncoder->encodePassword($user, $new_pwd_confirm);
+                $user->setPassword($new_pwd_encoded);
+                $manager->persist($user);
+                $manager->flush();
                 $this->addFlash('notice', 'Le mot de passe a eté bien changé !');
-            };
-        } else {
-            if (!is_null($old_pwd)) {
-                $this->addFlash('notice', 'L\'ancien mot de passe n\'est pas correct !');
+                    
+            }else {
+                if (!is_null($old_pwd)) {
+                    $this->addFlash('notice', 'L\'ancien mot de passe n\'est pas correct !');
+                }
+            }
+        }else{
+            if (!is_null($new_pwd) && !is_null($new_pwd_confirm)) {
+                $this->addFlash('notice', 'Les deux mots de passe ne correspondent pas');
             }
         }
+
         return $this->render('security/changePassword.html.twig', [
             'form' => '',
         ]);
