@@ -5,41 +5,47 @@
 {% block body %}
 
     <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{  path('addRessource') }}">
-                        <span data-feather="home"></span>
-                            S'exprimer
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{  path('myResources') }}">
-                        <span data-feather="file"></span>
-                            Vos ressources
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{  path('security_password_change') }}">
-                        <span data-feather="file"></span>
-                            Changer le mot de passe
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{  path('search') }}">
-                        <span data-feather="shopping-cart"></span>
-                            Recherche
-                        </a>
-                    </li>
-                </ul>
+
+        <aside class="col-12 col-md-2 p-0 bg-light sidebar">
+        <nav class="navbar navbar-expand bg-light flex-md-column flex-row position-sticky align-items-start">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse " id="navbarSupportedContent2">
+            <ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between   me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{  path('addRessource') }}">
+                            <span data-feather="home"></span>
+                                S'exprimer
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{  path('myResources') }}">
+                            <span data-feather="file"></span>
+                                Vos ressources
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{  path('security_password_change') }}">
+                            <span data-feather="file"></span>
+                                Changer le mot de passe
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{  path('search') }}">
+                            <span data-feather="shopping-cart"></span>
+                                Recherche
+                            </a>
+                        </li>
+            </ul>
             </div>
         </nav>
+        </aside>
 
 
-
-        <div class="ressource-list text-center col-md-9 col-lg-10">
-            <h4>Bienvenue dans votre espace personnel</h4>
+        <div class="ressource-list text-center col">
+            <h4 class="my-5">Bienvenue dans votre espace personnel</h4>
         </div>
 
 

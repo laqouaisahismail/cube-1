@@ -56,7 +56,7 @@ class RessourceType extends AbstractType
                     'Brouillon' => 'brouillon',
                 ],
             ])
-            ->add('submit', SubmitType::class);
+            ->add('Publier', SubmitType::class);
 
     }
 

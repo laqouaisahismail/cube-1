@@ -12,7 +12,7 @@
 <div class="ressource-list text-center">
 <h1>Outil de recherche</h1>
 
-<div class="w-25 mx-auto my-3">
+<div class="w-25 rw-75 mx-auto my-3">
 {{ form(form) }}
 </div>
 
@@ -27,10 +27,10 @@
             <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
             <p>{{ ressource.contenu }}</p>
             {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
-                <img src="{{ media }}" alt="post media" height="auto" width="500">
+                <img src="{{ media }}" alt="post media" height="auto" class="post-media">
 
             {% elseif ext == "mp4" %}
-                <video controls width="500" height="auto">
+                <video controls class="post-media" height="auto">
 
                     <source src="{{ media }}" type="video/mp4">
 
