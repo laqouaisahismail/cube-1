@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <div class="row ressources-row">
+{#     <div class="row ressources-row">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column primary">
@@ -57,10 +57,10 @@
 
                         <p>{{ ressource.contenu }}</p>
                         {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
-                            <img src="{{ media }}" alt="post media" height="auto" width="500">
+                            <img src="{{ media }}" alt="post media" height="auto" class="post-media">
 
                         {% elseif ext == "mp4" %}
-                            <video controls width="500" height="auto">
+                            <video controls class="post-media" height="auto">
 
                                 <source src="{{ media }}" type="video/mp4">
 
@@ -84,4 +84,87 @@
             {% endfor %}
         </div>
     </div>
-{% endblock %}
+ #}
+ <div class="container-fluid h-100">
+  <div class="row h-100">
+    <aside class="col-12 col-md-2 p-0 bg-light sidebar">
+      <nav class="navbar navbar-expand bg-light flex-md-column flex-row position-sticky align-items-start">
+        <div class="collapse navbar-collapse">
+          <ul class="flex-md-column flex-row navbar-nav w-100 justify-content-between">
+            <li class="nav-item">
+                <a class="nav-link" href="{{  path('addRessource') }}">
+                <span data-feather="home"></span>
+                    S'exprimer
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{  path('profile') }}">
+                <span data-feather="file"></span>
+                    Profil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{  path('search') }}">
+                <span data-feather="shopping-cart"></span>
+                    Recherche
+                </a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+    <main class="ressource-list text-center col">
+            {% for ressource in ressources %}
+                {% set media =  asset(ressource.media) %}
+                {% set ressourceId =  ressource.id %}
+                {% set ext =  extension[ressourceId] %}
+                <hr>
+                    <div class="ressource">
+                        {% if not crud %}
+                            <p class="text-secondary mx-5">
+                            {% for user in users %}
+                                {% if user.id == ressource.iduser %}
+                                    {{user.username}}
+                                {% endif %}
+                            {% endfor %}
+                            </p>
+                        {% endif %}
+                        <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
+
+                        {% if ressource.statut == 'brouillon' %}
+                            <div class="draft"><i class="far fa-clipboard mx-2"></i><span>brouillon</span></div>
+                        {% endif %}
+
+                        <p>{{ ressource.contenu }}</p>
+                        {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
+                            <img src="{{ media }}" alt="post media" height="auto" class="post-media">
+
+                        {% elseif ext == "mp4" %}
+                            <video controls class="post-media" height="auto">
+
+                                <source src="{{ media }}" type="video/mp4">
+
+                                Désolé, votre navigateur ne prend pas en charge les vidéos intégrées.
+                            </video>
+                        
+                        {% else %}
+
+                            <a href="{{ media }}" target="_blank">Voir le fichier</a>
+
+                        {% endif %}
+
+                        {% if crud %}
+                            <div class="crud">
+                                <a href="{{  path('editRessource', {'id':ressource.id}) }}"><i class="far fa-edit mx-2"></i></a>
+                                <a href="{{  path('deleteRessource', {'id':ressource.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement cet ressource ?');"><i class="far fa-trash-alt mx-2"></i></a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <br><br>
+            {% endfor %}
+    </main>
+  </div>
+</div>
+ 
+ 
+ {% endblock %}

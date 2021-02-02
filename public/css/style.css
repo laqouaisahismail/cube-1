@@ -7,13 +7,24 @@
 a{
     text-decoration: none;
 }
-#sidebarMenu .nav-link{
+.post-media{
+  width: 500px;
+  max-width: 100%;
+}
+.sidebar .nav-link{
     color: black;
 }
-#sidebarMenu{
+@media (min-width: 768px) { 
+  .sidebar{
     min-height: 90vh;
-
+  }
 }
+@media (max-width: 900px) { 
+  .rw-75{
+    width: 75% !important;
+  }
+
+ }
 .navbar{
     background-color: #03989e ;
 }
@@ -110,3 +121,4 @@ label {
   .form_group{
     position: relative;
   }
+  

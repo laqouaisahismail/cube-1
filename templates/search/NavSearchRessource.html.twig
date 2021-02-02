@@ -3,11 +3,6 @@
 {% block title %}Recherche{% endblock %}
 
 {% block body %}
-<style>
-
-</style>
-
-
 
 <div class="ressource-list text-center">
 <h1>Resultat de votre recherche</h1>
@@ -22,10 +17,10 @@
             <h2 class="res-title"><a href="{{path('viewRessource', {'id':ressourceId})}}">{{ ressource.titre }}</a></h2>
             <p>{{ ressource.contenu }}</p>
             {% if ext == "jpeg" or ext == "jpg" or ext == "png" or ext == "gif" %}
-                <img src="{{ media }}" alt="post media" height="auto" width="500">
+                <img src="{{ media }}" alt="post media" height="auto" class="post-media">
 
             {% elseif ext == "mp4" %}
-                <video controls width="500" height="auto">
+                <video controls class="post-media" height="auto">
 
                     <source src="{{ media }}" type="video/mp4">
 
