@@ -41,10 +41,10 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+   /**
+     * @ORM\Column(name="roles", type="array")
      */
-    private $role;
+    private $roles = array();
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -103,9 +103,21 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getRole(): ?string
-    {
-        return $this->role;
+    public function getRoles() {
+        if (empty($this->roles)) {
+            return ['ROLE_USER'];
+        }
+        return $this->roles;
+    }
+    public function getRole() {
+        if (empty($this->roles)) {
+            return ['ROLE_USER'];
+        }
+        return $this->roles;
+    }
+
+    function addRole($role) {
+        $this->roles[] = $role;
     }
 
     public function getApiToken(): ?string
@@ -141,9 +153,5 @@ class User implements UserInterface
 
     public function eraseCredentials() {}
     public function getSalt() {}
-    
-    public function getRoles() {
-        return ['ROLE_USER'];
 
-    }
 }
