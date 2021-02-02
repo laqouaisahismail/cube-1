@@ -51,7 +51,7 @@ class SecurityController extends AbstractController
             $manager = $this->getDoctrine()->getManager();
 
 
-            $user = $user->setRole("user");
+            $user->addRole("ROLE_USER");
 
 
             $manager->persist($user);
