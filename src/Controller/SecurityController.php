@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 class SecurityController extends AbstractController
@@ -97,14 +98,15 @@ class SecurityController extends AbstractController
         return $this->render('security/registration.html.twig', [
             'form' => $form->createView()
         ]);
-    } 
-    
-    /**
-    * @Route("/profile/mdp-change", name="security_password_change")
-    */
-    public function passwordChange(Request $request, EntityManagerInterface $manager,UserPasswordEncoderInterface $passwordEncoder) {
+    }
 
-        $old_pwd = $request->get('old_password'); 
+    /**
+     * @Route("/profile/mdp-change", name="security_password_change")
+     */
+    public function passwordChange(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder)
+    {
+
+        $old_pwd = $request->get('old_password');
         $new_pwd = $request->get('new_password');
         $new_pwd_confirm = $request->get('new_password_confirm');
 
@@ -135,13 +137,13 @@ class SecurityController extends AbstractController
             'form' => '',
         ]);
     }
-    
+
     /**
      * @Route("/flutter/signin", name="security_signin", methods={"POST"})
      */
     public function signin(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
- 
+
         $data = json_decode($request->getContent(), true);
 
         //$user = $this->getUser();
@@ -156,7 +158,7 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        if($user->getEmail() == $data['email'] && $encoder->isPasswordValid($user, $data['password'], $user->getSalt())) {
+        if ($user->getEmail() == $data['email'] && $encoder->isPasswordValid($user, $data['password'], $user->getSalt())) {
 
             $apiToken = new ApiToken($user);
             $manager->persist($apiToken);
@@ -166,7 +168,7 @@ class SecurityController extends AbstractController
                 'login' => 'successful',
                 'username' => $user->getUsername(),
                 'token' => $apiToken->getToken(),
-            ]); 
+            ]);
         }
 
         return $this->json([
@@ -179,7 +181,7 @@ class SecurityController extends AbstractController
      */
     public function getProfile(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
- 
+
         $token = $request->headers->get('X-AUTH-TOKEN');
         echo $token;
         $token = $this->getDoctrine()->getRepository('App:ApiToken')->findOneBy(['token' => $token]);
@@ -191,7 +193,7 @@ class SecurityController extends AbstractController
                 'username' => $token->getUser()->getUsername(),
                 'email' => $token->getUser()->getEmail(),
                 'name' => $token->getUser()->getNom(),
-            ]); 
+            ]);
         }
 
         return $this->json([
@@ -212,7 +214,8 @@ class SecurityController extends AbstractController
     /**
      * @Route("/flutter/signout", name="signout")
      */
-    public function signout() {
+    public function signout()
+    {
         return $this->json([
             'logout' => 'success'
         ]);
@@ -226,5 +229,62 @@ class SecurityController extends AbstractController
     {
 
         return $this->render('security/logout.html.twig');
+    }
+
+    /**
+     * @Route("/flutter/profile/modify", name="modifyProfile")
+     */
+    public function modifyProfile(
+        Request $request,
+        UserInterface $user,
+        EntityManagerInterface $manager,
+        UserPasswordEncoderInterface $encoder
+    ): Response {
+        $token = $request->headers->get('X-AUTH-TOKEN');
+
+        $token = $this->getDoctrine()->getRepository('App:ApiToken')->findOneBy(['token' => $token]);
+        $now = new \DateTime();
+        if ($token !== null && $token->getExpiresAt() > $now) {
+            $user = $token->getUser();
+
+            $data = json_decode($request->getContent(), true);
+
+            $user->setUsername($data["username"]);
+            $user->setEmail($data["email"]);
+            if ($data['password'] != null) {
+                $change = true;
+                $user->setPassword($data["password"]);
+            } else {
+                $change = false;
+            }
+
+            // password must be 10 characters long, with at least an uppercase, a lowercase and one number
+            if ($user->getUsername() == null || $user->getUsername() == '') {
+                $message = 'Nom invalide. Veuillez entrer un nom.';
+            } else if ($user->getEmail() == null || $user->getEmail() == '' || filter_var($user->getEmail(), FILTER_VALIDATE_EMAIL) === false) {
+                $message = 'Email invalide. Veuillez entrer un email valide.';
+            } else if ($change && ($user->getPassword() == null || $user->getPassword() == '' || filter_var($user->getPassword(), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{10,}$/"))) === false)) {
+                $message = 'Mot de passe invalide. Veuillez entrer un mot de passe de 10 caractères minimum, avec au moins une minuscule, une majuscule et un chiffre';
+            } else if ($user->getNom() == null || $user->getNom() == '') {
+                $message = 'Nom invalide. Veuillez entrer votre nom.';
+            } else {
+                $hash = $encoder->encodePassword($user, $user->getPassword());
+
+                $user->setPassword($hash);
+
+                $manager = $this->getDoctrine()->getManager();
+
+                $manager->flush();
+
+                return $this->json([
+                    'message' => 'Modification réussie',
+                    'success' => true,
+                ]);
+            }
+            return $this->json([
+                'message' => $message,
+                'success' => false,
+            ]);
+        }
     }
 }
