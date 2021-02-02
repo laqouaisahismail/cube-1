@@ -288,10 +288,10 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("admin/inscription")
+     * @Route("admin/inscription", name="newAdmin")
      */
     public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder) {
-        
+
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
         $form->handleRequest($request);

@@ -10,7 +10,6 @@
 									<th>Nom prenom</th>
 									<th>Email</th>
 									<th>Username</th>
-									<th>Role</th>
 									<th>Ban</th>
 									<th>Activer</th>
 									<th>Supprimer</th>
@@ -21,9 +20,8 @@
                                     <th>{{ user.nom}}</th>
                                     <th>{{ user.email}}</th>
                                     <th>{{ user.username}}</th>
-                                    <th>{{ user.role}}</th>
-                                    <th><form action="" method="POST"> <input name="idBan" type="hidden" value="<?= $id; ?>"> <button name="ban" type="submit" class="btn btn-outline-warning"><i class="fas fa-ban fa-lg"> </i> </button></form></th>
-									<th><form action="" method="POST"> <input name="idactive" type="hidden" value="<?= $id; ?>"> <button name="activer" type="submit" class="btn btn-outline-primary waves-effect"> <i class="far fa-check-circle fa-lg"></i> </button></form></th>
+                                    <th><button name="ban" type="submit" class="btn btn-outline-warning"><i class="fas fa-ban fa-lg"> </i> </button></th>
+									<th><button name="activer" type="submit" class="btn btn-outline-primary waves-effect"> <i class="far fa-check-circle fa-lg"></i> </button></th>
 									<th><a class="btn btn-outline-danger" href="{{  path('UserDelete', {'id':user.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?');"><i class="fas fa-trash-alt fa-lg"></i></th>
 								</tr>
                                 {% endfor %}
