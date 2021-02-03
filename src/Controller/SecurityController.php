@@ -264,8 +264,6 @@ class SecurityController extends AbstractController
                 $message = 'Email invalide. Veuillez entrer un email valide.';
             } else if ($change && ($user->getPassword() == null || $user->getPassword() == '' || filter_var($user->getPassword(), FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{10,}$/"))) === false)) {
                 $message = 'Mot de passe invalide. Veuillez entrer un mot de passe de 10 caractères minimum, avec au moins une minuscule, une majuscule et un chiffre';
-            } else if ($user->getNom() == null || $user->getNom() == '') {
-                $message = 'Nom invalide. Veuillez entrer votre nom.';
             } else {
                 $hash = $encoder->encodePassword($user, $user->getPassword());
 
