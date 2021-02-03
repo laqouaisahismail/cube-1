@@ -43,8 +43,15 @@
         </nav>
         </aside>
 
-        <div class="ressource-list text-center col">
-            <h4 class="my-5">Bienvenue dans votre espace personnel</h4>
+        <div class="ressource-list text-left w-50 rw-75 mx-auto col">
+        <div class="w-50 rw-75 mx-auto">
+                <h4 class="my-5">Bienvenue dans votre espace personnel, voici vos donnes</h4>
+
+                <p>Nom Prénom: {{ user.nom}}</p>
+                <p>Email: {{ user.email}}</p>
+                <p>Username: {{ user.username}}</p>
+
+        </div>
         </div>
 
 
